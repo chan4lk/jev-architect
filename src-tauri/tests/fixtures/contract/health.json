@@ -1,0 +1,8 @@
+{
+  "ollama_reachable": true,
+  "model_present": false,
+  "model": "hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M",
+  "pull_command": "ollama pull hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M",
+  "openrouter": "ok",
+  "openrouter_error": null
+}

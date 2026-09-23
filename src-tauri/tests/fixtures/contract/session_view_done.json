@@ -1,0 +1,1680 @@
+{
+  "session": {
+    "id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+    "created_at": "2026-09-23T02:27:54.081175Z",
+    "title": "We need a customer self-service portal for an insurer, built…",
+    "mode": "describe",
+    "input_text": "We need a customer self-service portal for an insurer, built by a .NET team on Azure.",
+    "doc_name": null,
+    "stage": "done",
+    "error": null,
+    "brief_confirmed_at": "2026-09-23T02:27:54.082846Z"
+  },
+  "sections": null,
+  "doc_path": null,
+  "brief": {
+    "summary": "A customer self-service portal for an insurer.",
+    "context": {
+      "scale": "medium",
+      "budget": "moderate",
+      "timeline": "normal",
+      "team_size": "small",
+      "compliance": [
+        "gdpr"
+      ],
+      "data_sensitivity": "confidential"
+    },
+    "requirements": [
+      {
+        "text": "Policyholders track claims",
+        "sources": []
+      }
+    ],
+    "nfrs": [
+      {
+        "text": "Pages load in under two seconds",
+        "sources": []
+      }
+    ],
+    "constraints": [],
+    "team_skills": [
+      {
+        "text": "The team knows .NET",
+        "sources": []
+      }
+    ],
+    "mentioned_technologies": [
+      ".NET",
+      "Azure"
+    ]
+  },
+  "report": {
+    "gates": {
+      "is_technical_request": 0.9,
+      "has_enough_context": 0.9,
+      "injection": 0.0
+    },
+    "decisions": [
+      {
+        "decision": {
+          "id": "27b51177-a576-4149-8f1c-2518f0466b05",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "cloud-platform",
+          "choice": "azure",
+          "confidence": 0.8,
+          "probabilities": {
+            "azure": 0.8,
+            "hetzner": 0.1,
+            "hybrid": 0.1
+          },
+          "option_scores": [
+            {
+              "option_id": "azure",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "hetzner",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            },
+            {
+              "option_id": "hybrid",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "4a42beaeef0ef5da1ef128530a98e663a3b644d85582f23bd3b94aea4c59edb5",
+          "cited_sections": []
+        },
+        "type_name": "Cloud platform",
+        "options": [
+          {
+            "id": "azure",
+            "name": "Microsoft Azure",
+            "ring": "adopt",
+            "description": "BISTEC primary platform. Default for all enterprise and client-facing projects. Compute preference: Azure Container Apps, then App Service, then AKS only when orchestration complexity is justified."
+          },
+          {
+            "id": "hetzner",
+            "name": "Hetzner Cloud",
+            "ring": "trial",
+            "description": "BISTEC budget platform. For internal tools, dev/staging environments and cost-sensitive workloads. Hetzner Cloud VMs with Docker Compose or k3s."
+          },
+          {
+            "id": "hybrid",
+            "name": "Azure + Hetzner (hybrid)",
+            "ring": "trial",
+            "description": "Production on Azure, non-production on Hetzner to reduce spend."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "a59deafe-8157-4aca-9c6b-6aa439858af3",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "backend-platform",
+          "choice": "dotnet",
+          "confidence": 0.8,
+          "probabilities": {
+            "dotnet": 0.8,
+            "node": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "dotnet",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "node",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "4a42beaeef0ef5da1ef128530a98e663a3b644d85582f23bd3b94aea4c59edb5",
+          "cited_sections": []
+        },
+        "type_name": "Backend platform",
+        "options": [
+          {
+            "id": "dotnet",
+            "name": ".NET 8+ / C#",
+            "ring": "adopt",
+            "description": "BISTEC primary backend. Enterprise APIs, complex domain logic, high-performance services."
+          },
+          {
+            "id": "node",
+            "name": "Node.js / TypeScript",
+            "ring": "trial",
+            "description": "BISTEC secondary backend. Lightweight APIs, BFF layers, real-time services, rapid prototypes."
+          },
+          {
+            "id": "java-python",
+            "name": "Java or Python",
+            "ring": "hold",
+            "description": "Avoid for web APIs unless it is a client requirement or an ML/AI workload."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "b9077143-06ff-4b07-be33-7cb29305c667",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "rest-api-dotnet",
+          "choice": "aspnet-controllers",
+          "confidence": 0.8,
+          "probabilities": {
+            "aspnet-controllers": 0.8,
+            "dotnet-minimal-api": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "aspnet-controllers",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "dotnet-minimal-api",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "a3134c8e1514a65a7df1b84366aafc24a242139ab4c047a7df6d1640ea012719",
+          "cited_sections": []
+        },
+        "type_name": "REST API (.NET)",
+        "options": [
+          {
+            "id": "dotnet-minimal-api",
+            "name": ".NET 8 Minimal API",
+            "ring": "adopt",
+            "description": "Minimal APIs for simple services; MediatR, FluentValidation, Serilog, Polly per BISTEC .NET defaults."
+          },
+          {
+            "id": "aspnet-controllers",
+            "name": "ASP.NET Controllers",
+            "ring": "trial",
+            "description": "Controllers for complex domains."
+          },
+          {
+            "id": "wcf",
+            "name": "WCF",
+            "ring": "hold",
+            "description": "Legacy SOAP framework; avoid."
+          },
+          {
+            "id": "dotnet-framework",
+            "name": ".NET Framework",
+            "ring": "hold",
+            "description": "Legacy Windows-only runtime; avoid."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "6cb0c347-e5ee-42b5-ab46-d54d8bd5ae54",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "relational-db-enterprise",
+          "choice": "postgresql",
+          "confidence": 0.8,
+          "probabilities": {
+            "postgresql": 0.8,
+            "sql-server": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "postgresql",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "sql-server",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "69302410d8f234696eaee69e412cfca446d0337cdcfa6be3ff3061697204f360",
+          "cited_sections": []
+        },
+        "type_name": "Relational DB (enterprise)",
+        "options": [
+          {
+            "id": "sql-server",
+            "name": "SQL Server",
+            "ring": "adopt",
+            "description": "Primary RDBMS for transactional data, complex queries and reporting; Elastic Pools for many small databases."
+          },
+          {
+            "id": "postgresql",
+            "name": "PostgreSQL",
+            "ring": "trial",
+            "description": "Open-source RDBMS."
+          },
+          {
+            "id": "mysql",
+            "name": "MySQL",
+            "ring": "hold",
+            "description": "Avoid."
+          },
+          {
+            "id": "sqlite-prod",
+            "name": "SQLite (prod)",
+            "ring": "hold",
+            "description": "Avoid SQLite for production enterprise data."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "8527cdb6-22a3-4740-8812-ba6f0ba39040",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "document-db",
+          "choice": "cosmos-db",
+          "confidence": 0.8,
+          "probabilities": {
+            "cosmos-db": 0.8,
+            "mongodb-hetzner": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "cosmos-db",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "mongodb-hetzner",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "c2ce9890091c12094f4144510836d2bd897e18f14dd8a18e168c37a19050b19c",
+          "cited_sections": []
+        },
+        "type_name": "Document DB",
+        "options": [
+          {
+            "id": "cosmos-db",
+            "name": "Cosmos DB (SQL API)",
+            "ring": "adopt",
+            "description": "Primary NoSQL: document storage, global distribution, flexible schema; serverless tier under 10K RU/s."
+          },
+          {
+            "id": "mongodb-hetzner",
+            "name": "MongoDB on Hetzner",
+            "ring": "trial",
+            "description": "Self-hosted document database on the budget platform."
+          },
+          {
+            "id": "dynamodb",
+            "name": "DynamoDB",
+            "ring": "hold",
+            "description": "AWS-only; avoid."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "44643d66-73dd-4f2d-bceb-2c6fd20980aa",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "full-text-search",
+          "choice": "azure-ai-search",
+          "confidence": 0.8,
+          "probabilities": {
+            "azure-ai-search": 0.8,
+            "elasticsearch-hetzner": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "azure-ai-search",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "elasticsearch-hetzner",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "00df09cfabe061aabe0fdae5058a5357fbde977a5711a784c9ba5b142b6ffebe",
+          "cited_sections": []
+        },
+        "type_name": "Full-text search",
+        "options": [
+          {
+            "id": "azure-ai-search",
+            "name": "Azure AI Search",
+            "ring": "adopt",
+            "description": "Full-text, vector and semantic ranking search."
+          },
+          {
+            "id": "elasticsearch-hetzner",
+            "name": "Elasticsearch (Hetzner)",
+            "ring": "trial",
+            "description": "Self-hosted search on the budget platform."
+          },
+          {
+            "id": "sql-like",
+            "name": "SQL LIKE queries",
+            "ring": "hold",
+            "description": "Pattern matching in SQL; avoid for search."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "c5822102-5052-4191-b1fe-a6f50318b7d6",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "file-storage",
+          "choice": "azure-blob",
+          "confidence": 0.8,
+          "probabilities": {
+            "azure-blob": 0.8,
+            "hetzner-object-storage": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "azure-blob",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "hetzner-object-storage",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "bbdc06b4bcccb38465b40e0ef4a2a5117b7c9525d265f98938be25dc379f3ac1",
+          "cited_sections": []
+        },
+        "type_name": "File storage",
+        "options": [
+          {
+            "id": "azure-blob",
+            "name": "Azure Blob Storage",
+            "ring": "adopt",
+            "description": "Object storage with Hot, Cool and Archive tiering."
+          },
+          {
+            "id": "hetzner-object-storage",
+            "name": "Hetzner Object Storage",
+            "ring": "trial",
+            "description": "S3-compatible object storage on the budget platform."
+          },
+          {
+            "id": "local-filesystem",
+            "name": "Local filesystem",
+            "ring": "hold",
+            "description": "Server disk storage; avoid."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "6cbe80d8-dc51-4940-98e1-3db130b761d4",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "message-queue-enterprise",
+          "choice": "azure-service-bus",
+          "confidence": 0.8,
+          "probabilities": {
+            "azure-service-bus": 0.8,
+            "rabbitmq-hetzner": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "azure-service-bus",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "rabbitmq-hetzner",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "a914e942487b9b96a6326386f1c74c9f28d71009f90b4393afeaf9a2df68966b",
+          "cited_sections": []
+        },
+        "type_name": "Message queue (enterprise)",
+        "options": [
+          {
+            "id": "azure-service-bus",
+            "name": "Azure Service Bus",
+            "ring": "adopt",
+            "description": "Enterprise messaging broker."
+          },
+          {
+            "id": "rabbitmq-hetzner",
+            "name": "RabbitMQ (Hetzner)",
+            "ring": "trial",
+            "description": "Self-hosted broker on the budget platform."
+          },
+          {
+            "id": "azure-queue-complex",
+            "name": "Azure Queue (complex)",
+            "ring": "hold",
+            "description": "Azure Queue Storage used for complex messaging needs; avoid."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "c260e7de-36c5-4093-b6b1-8ab068d0d188",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "message-queue-simple",
+          "choice": "azure-queue-storage",
+          "confidence": 0.8,
+          "probabilities": {
+            "azure-queue-storage": 0.8,
+            "redis-pubsub": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "azure-queue-storage",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "redis-pubsub",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "5b20ecda1a7f6c8af99286b9be128b4a93642ee9d2c9dcf7863816c58e7311f8",
+          "cited_sections": []
+        },
+        "type_name": "Message queue (simple)",
+        "options": [
+          {
+            "id": "azure-queue-storage",
+            "name": "Azure Queue Storage",
+            "ring": "adopt",
+            "description": "Simple queues."
+          },
+          {
+            "id": "redis-pubsub",
+            "name": "Redis Pub/Sub",
+            "ring": "trial",
+            "description": "Lightweight pub/sub on Redis."
+          },
+          {
+            "id": "kafka",
+            "name": "Kafka (unless scale demands)",
+            "ring": "hold",
+            "description": "Event streaming platform; avoid unless scale demands it."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "e35f75fc-0be3-4e3f-9aa0-15fcbfa547ae",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "real-time",
+          "choice": "azure-web-pubsub",
+          "confidence": 0.8,
+          "probabilities": {
+            "azure-web-pubsub": 0.8,
+            "signalr": 0.1,
+            "socket-io": 0.1
+          },
+          "option_scores": [
+            {
+              "option_id": "azure-web-pubsub",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "signalr",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            },
+            {
+              "option_id": "socket-io",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "3cfe1cf7d082dec0bbe1190d6d630e1b2524ce14c55b6e9005d596782f4e6301",
+          "cited_sections": []
+        },
+        "type_name": "Real-time",
+        "options": [
+          {
+            "id": "signalr",
+            "name": "SignalR (.NET)",
+            "ring": "adopt",
+            "description": "Real-time for .NET backends."
+          },
+          {
+            "id": "socket-io",
+            "name": "Socket.IO (Node)",
+            "ring": "adopt",
+            "description": "Real-time for Node backends."
+          },
+          {
+            "id": "azure-web-pubsub",
+            "name": "Azure Web PubSub",
+            "ring": "trial",
+            "description": "Managed WebSocket service."
+          },
+          {
+            "id": "polling",
+            "name": "Polling",
+            "ring": "hold",
+            "description": "Periodic client polling; avoid."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "704a7884-7619-464b-a804-6d4764bce7fa",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "background-jobs",
+          "choice": "azure-functions",
+          "confidence": 0.8,
+          "probabilities": {
+            "azure-functions": 0.8,
+            "bullmq": 0.1,
+            "hangfire": 0.1
+          },
+          "option_scores": [
+            {
+              "option_id": "azure-functions",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "bullmq",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            },
+            {
+              "option_id": "hangfire",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "03ec1d38d85b430bb5c311208f3faf317ac9c95c5f615d1e8d04d5b155b841df",
+          "cited_sections": []
+        },
+        "type_name": "Background jobs",
+        "options": [
+          {
+            "id": "azure-functions",
+            "name": "Azure Functions",
+            "ring": "adopt",
+            "description": "Isolated Worker on .NET 8+, Durable Functions for orchestration; consumption-based."
+          },
+          {
+            "id": "hangfire",
+            "name": "Hangfire",
+            "ring": "adopt",
+            "description": ".NET background job processing in-process."
+          },
+          {
+            "id": "bullmq",
+            "name": "BullMQ (Node)",
+            "ring": "trial",
+            "description": "Redis-backed job queue for Node."
+          },
+          {
+            "id": "cron-scripts",
+            "name": "cron + scripts",
+            "ring": "hold",
+            "description": "Ad-hoc scheduled scripts; avoid."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "78368fc1-83f5-4441-8273-02c0e2002f8e",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "auth-enterprise",
+          "choice": "auth0",
+          "confidence": 0.8,
+          "probabilities": {
+            "auth0": 0.8,
+            "entra-id": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "auth0",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "entra-id",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "b38f5d5f14c41423c3c81b09c8a6955eff1686d18bc09b82d20d6a5faae3d41a",
+          "cited_sections": []
+        },
+        "type_name": "Auth (enterprise)",
+        "options": [
+          {
+            "id": "entra-id",
+            "name": "Entra ID",
+            "ring": "adopt",
+            "description": "Microsoft Entra ID with OpenID Connect / OAuth 2.0; mandatory SSO for internal enterprise apps; Managed Identity for service-to-service."
+          },
+          {
+            "id": "auth0",
+            "name": "Auth0",
+            "ring": "trial",
+            "description": "Third-party identity platform."
+          },
+          {
+            "id": "custom-jwt",
+            "name": "Custom JWT auth",
+            "ring": "hold",
+            "description": "Home-grown token auth; avoid."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "52678dbe-7043-4e68-be96-7fbbcd6b66cb",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "frontend",
+          "choice": "blazor",
+          "confidence": 0.8,
+          "probabilities": {
+            "blazor": 0.8,
+            "nextjs-react": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "blazor",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "nextjs-react",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "77885276ba3f95b3513958ef3d42d96d0e111256380c0edd00f7b0da848831a1",
+          "cited_sections": []
+        },
+        "type_name": "Frontend",
+        "options": [
+          {
+            "id": "nextjs-react",
+            "name": "Next.js + React",
+            "ring": "adopt",
+            "description": "React 18+ / Next.js 14+ with Tailwind, shadcn/ui."
+          },
+          {
+            "id": "blazor",
+            "name": "Blazor (.NET teams)",
+            "ring": "trial",
+            "description": "For .NET-heavy teams."
+          },
+          {
+            "id": "angular",
+            "name": "Angular (new projects)",
+            "ring": "hold",
+            "description": "Avoid for new projects."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "88ee7960-fc3b-4c9e-8e8a-5aedcb9f15ea",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "css",
+          "choice": "css-modules",
+          "confidence": 0.8,
+          "probabilities": {
+            "css-modules": 0.8,
+            "tailwind": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "css-modules",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "tailwind",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "15694e25f1c6b3c41a353deb834608b0488069811a928547274aea6a668b3c79",
+          "cited_sections": []
+        },
+        "type_name": "CSS",
+        "options": [
+          {
+            "id": "tailwind",
+            "name": "Tailwind CSS",
+            "ring": "adopt",
+            "description": "Utility-first CSS."
+          },
+          {
+            "id": "css-modules",
+            "name": "CSS Modules",
+            "ring": "trial",
+            "description": "Locally scoped CSS files."
+          },
+          {
+            "id": "styled-components",
+            "name": "Styled-components",
+            "ring": "hold",
+            "description": "Runtime CSS-in-JS; avoid."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "9bae3364-9668-40c2-84ff-2e5c96d3f9e8",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "state-management",
+          "choice": "redux-toolkit",
+          "confidence": 0.8,
+          "probabilities": {
+            "redux-toolkit": 0.8,
+            "tanstack-query": 0.1,
+            "zustand": 0.1
+          },
+          "option_scores": [
+            {
+              "option_id": "redux-toolkit",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "tanstack-query",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            },
+            {
+              "option_id": "zustand",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "68426d950056e7926070217a9a266a0840de862702799e7fdf96d1696b5abba5",
+          "cited_sections": []
+        },
+        "type_name": "State management",
+        "options": [
+          {
+            "id": "zustand",
+            "name": "Zustand",
+            "ring": "adopt",
+            "description": "Lightweight client state."
+          },
+          {
+            "id": "tanstack-query",
+            "name": "TanStack Query",
+            "ring": "adopt",
+            "description": "Server-state caching and synchronisation."
+          },
+          {
+            "id": "redux-toolkit",
+            "name": "Redux Toolkit",
+            "ring": "trial",
+            "description": "Redux with less boilerplate."
+          },
+          {
+            "id": "mobx",
+            "name": "MobX",
+            "ring": "hold",
+            "description": "Avoid."
+          },
+          {
+            "id": "recoil",
+            "name": "Recoil",
+            "ring": "hold",
+            "description": "Avoid."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "a548846f-46fb-407e-8edb-cd9bbd3274b5",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "testing-dotnet",
+          "choice": "mstest",
+          "confidence": 0.8,
+          "probabilities": {
+            "mstest": 0.8,
+            "xunit-nsubstitute": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "mstest",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "xunit-nsubstitute",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "c63768f8ba4ff6495ccdf81cca40dcb63980ef059dff6a4f804f3281abbdf774",
+          "cited_sections": []
+        },
+        "type_name": "Testing (.NET)",
+        "options": [
+          {
+            "id": "xunit-nsubstitute",
+            "name": "xUnit + NSubstitute",
+            "ring": "adopt",
+            "description": "BISTEC .NET test default."
+          },
+          {
+            "id": "mstest",
+            "name": "MSTest",
+            "ring": "trial",
+            "description": "Microsoft test framework."
+          },
+          {
+            "id": "nunit",
+            "name": "NUnit (prefer xUnit)",
+            "ring": "hold",
+            "description": "Avoid; prefer xUnit."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "490bb48b-0298-4e74-8560-5fb3dde1b907",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "e2e-testing",
+          "choice": "cypress",
+          "confidence": 0.8,
+          "probabilities": {
+            "cypress": 0.8,
+            "playwright": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "cypress",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "playwright",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "17fbd60a4c5cf18939c5805101a01dfcb7fb45c5ff0b979cfb764b15c12c582c",
+          "cited_sections": []
+        },
+        "type_name": "E2E testing",
+        "options": [
+          {
+            "id": "playwright",
+            "name": "Playwright",
+            "ring": "adopt",
+            "description": "Cross-browser E2E testing."
+          },
+          {
+            "id": "cypress",
+            "name": "Cypress",
+            "ring": "trial",
+            "description": "Browser E2E testing."
+          },
+          {
+            "id": "selenium",
+            "name": "Selenium",
+            "ring": "hold",
+            "description": "Avoid."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "21b7018c-7cd6-4387-bc96-5da0da75f84c",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "performance-testing",
+          "choice": "artillery",
+          "confidence": 0.8,
+          "probabilities": {
+            "artillery": 0.8,
+            "k6": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "artillery",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "k6",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "301676af03dda2b3ea933c40e017dfc46e2c90a11a6d54d0d8358abcee8bfa8b",
+          "cited_sections": []
+        },
+        "type_name": "Performance testing",
+        "options": [
+          {
+            "id": "k6",
+            "name": "k6",
+            "ring": "adopt",
+            "description": "Scriptable load testing."
+          },
+          {
+            "id": "artillery",
+            "name": "Artillery",
+            "ring": "trial",
+            "description": "Node-based load testing."
+          },
+          {
+            "id": "jmeter",
+            "name": "JMeter",
+            "ring": "hold",
+            "description": "Avoid."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "b7625dfd-0cc7-43a2-ae24-1a64a4b3316d",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "iac-azure",
+          "choice": "bicep",
+          "confidence": 0.8,
+          "probabilities": {
+            "bicep": 0.8,
+            "terraform": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "bicep",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "terraform",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "1e5ebff7dcfbf9f898a13c456ef679a840230714306c32e9b60b27c69f7e31e0",
+          "cited_sections": []
+        },
+        "type_name": "IaC (Azure)",
+        "options": [
+          {
+            "id": "bicep",
+            "name": "Bicep",
+            "ring": "adopt",
+            "description": "Azure-native IaC."
+          },
+          {
+            "id": "terraform",
+            "name": "Terraform",
+            "ring": "trial",
+            "description": "Multi-cloud IaC."
+          },
+          {
+            "id": "arm-templates",
+            "name": "ARM templates",
+            "ring": "hold",
+            "description": "Raw ARM JSON; avoid."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "ac1a1544-a3eb-4407-ba55-415315dbca01",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "ci-cd",
+          "choice": "azure-devops",
+          "confidence": 0.8,
+          "probabilities": {
+            "azure-devops": 0.8,
+            "github-actions": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "azure-devops",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "github-actions",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "fb98efaae5dc33d5d8c919e2d9ce183686b352ee6a7687f7135f31a7cc957ae6",
+          "cited_sections": []
+        },
+        "type_name": "CI/CD",
+        "options": [
+          {
+            "id": "github-actions",
+            "name": "GitHub Actions",
+            "ring": "adopt",
+            "description": "BISTEC CI/CD default; GitHub (Bistec org) source control."
+          },
+          {
+            "id": "azure-devops",
+            "name": "Azure DevOps",
+            "ring": "trial",
+            "description": "Azure Pipelines."
+          },
+          {
+            "id": "jenkins",
+            "name": "Jenkins",
+            "ring": "hold",
+            "description": "Avoid."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "7048fa18-92c6-4946-a172-5db68844cc54",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "containers",
+          "choice": "aks",
+          "confidence": 0.8,
+          "probabilities": {
+            "aks": 0.8,
+            "container-apps": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "aks",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "container-apps",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "1c5316cbb5797a3ac9d5747950f03028e054a3560229a9d630debf4282dbc1ff",
+          "cited_sections": []
+        },
+        "type_name": "Containers",
+        "options": [
+          {
+            "id": "container-apps",
+            "name": "Docker + Container Apps",
+            "ring": "adopt",
+            "description": "Azure Container Apps; scale to zero."
+          },
+          {
+            "id": "aks",
+            "name": "Docker + AKS",
+            "ring": "trial",
+            "description": "Kubernetes; only when orchestration complexity is justified."
+          },
+          {
+            "id": "docker-swarm",
+            "name": "Docker Swarm",
+            "ring": "hold",
+            "description": "Avoid."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      },
+      {
+        "decision": {
+          "id": "9f91f67b-bf82-4cc5-b02f-7b682df9c98d",
+          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "type_id": "monitoring",
+          "choice": "app-insights",
+          "confidence": 0.8,
+          "probabilities": {
+            "app-insights": 0.8,
+            "grafana-stack": 0.2
+          },
+          "option_scores": [
+            {
+              "option_id": "app-insights",
+              "criterion_scores": {
+                "bistec_alignment": 4.0,
+                "cost_fit": 4.0,
+                "lock_in": 4.0,
+                "nfr_fit": 4.0,
+                "security_posture": 4.0,
+                "team_skill_fit": 4.0
+              },
+              "composite": 1.0
+            },
+            {
+              "option_id": "grafana-stack",
+              "criterion_scores": {
+                "bistec_alignment": 1.0,
+                "cost_fit": 1.0,
+                "lock_in": 1.0,
+                "nfr_fit": 1.0,
+                "security_posture": 1.0,
+                "team_skill_fit": 1.0
+              },
+              "composite": 0.25
+            }
+          ],
+          "route": "proposed",
+          "reasons": [],
+          "model_snapshot": "typesafe/jev-1.13-20260901",
+          "request_hash": "1502322dee87b54762d744193e73f8eb5e321cd3e820630edae92949351dc9fc",
+          "cited_sections": []
+        },
+        "type_name": "Monitoring",
+        "options": [
+          {
+            "id": "app-insights",
+            "name": "App Insights + Azure Monitor",
+            "ring": "adopt",
+            "description": "Application Insights with adaptive sampling, 30-day retention."
+          },
+          {
+            "id": "grafana-stack",
+            "name": "Grafana stack (Hetzner)",
+            "ring": "trial",
+            "description": "Grafana + Prometheus + Loki on the budget platform."
+          },
+          {
+            "id": "elk",
+            "name": "ELK (unless justified)",
+            "ring": "hold",
+            "description": "Elasticsearch/Logstash/Kibana; avoid unless justified."
+          }
+        ],
+        "reviews": [],
+        "status": "proposed_ai",
+        "status_label": "Proposed (AI) — pending approval"
+      }
+    ],
+    "not_applicable": [],
+    "input_tokens": 2300,
+    "cost_usd": 0.023,
+    "truncated": false,
+    "criteria": [
+      {
+        "id": "nfr_fit",
+        "name": "Fit with non-functional requirements",
+        "weight": 0.25
+      },
+      {
+        "id": "team_skill_fit",
+        "name": "Team skill fit",
+        "weight": 0.15
+      },
+      {
+        "id": "cost_fit",
+        "name": "Cost fit",
+        "weight": 0.2
+      },
+      {
+        "id": "bistec_alignment",
+        "name": "BISTEC alignment",
+        "weight": 0.2
+      },
+      {
+        "id": "lock_in",
+        "name": "Freedom from lock-in",
+        "weight": 0.1
+      },
+      {
+        "id": "security_posture",
+        "name": "Security posture",
+        "weight": 0.1
+      }
+    ]
+  }
+}

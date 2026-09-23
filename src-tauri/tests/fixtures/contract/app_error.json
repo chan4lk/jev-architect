@@ -1,0 +1,5 @@
+{
+  "code": "brief_extraction_failed",
+  "message": "brief extraction failed: expected value at line 1 column 1",
+  "stage": "brief"
+}

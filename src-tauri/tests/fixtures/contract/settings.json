@@ -1,0 +1,20 @@
+{
+  "jev_model": "typesafe/jev-1.13",
+  "jev_base_url": "https://openrouter.ai/api",
+  "ollama_base_url": "http://127.0.0.1:11434",
+  "ollama_model": "hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M",
+  "state_token_budget": 20000,
+  "confidence_threshold": 0.5,
+  "min_margin": 0.05,
+  "max_questions_per_call": 64,
+  "max_concurrent_calls": 4,
+  "weights": {
+    "bistec_alignment": 0.2,
+    "cost_fit": 0.2,
+    "lock_in": 0.1,
+    "nfr_fit": 0.25,
+    "security_posture": 0.1,
+    "team_skill_fit": 0.15
+  },
+  "reviewer_name": "Jane Architect"
+}

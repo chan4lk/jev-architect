@@ -1,0 +1,100 @@
+{
+  "decision": {
+    "id": "27b51177-a576-4149-8f1c-2518f0466b05",
+    "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+    "type_id": "cloud-platform",
+    "choice": "azure",
+    "confidence": 0.8,
+    "probabilities": {
+      "azure": 0.8,
+      "hetzner": 0.1,
+      "hybrid": 0.1
+    },
+    "option_scores": [
+      {
+        "option_id": "azure",
+        "criterion_scores": {
+          "bistec_alignment": 4.0,
+          "cost_fit": 4.0,
+          "lock_in": 4.0,
+          "nfr_fit": 4.0,
+          "security_posture": 4.0,
+          "team_skill_fit": 4.0
+        },
+        "composite": 1.0
+      },
+      {
+        "option_id": "hetzner",
+        "criterion_scores": {
+          "bistec_alignment": 1.0,
+          "cost_fit": 1.0,
+          "lock_in": 1.0,
+          "nfr_fit": 1.0,
+          "security_posture": 1.0,
+          "team_skill_fit": 1.0
+        },
+        "composite": 0.25
+      },
+      {
+        "option_id": "hybrid",
+        "criterion_scores": {
+          "bistec_alignment": 1.0,
+          "cost_fit": 1.0,
+          "lock_in": 1.0,
+          "nfr_fit": 1.0,
+          "security_posture": 1.0,
+          "team_skill_fit": 1.0
+        },
+        "composite": 0.25
+      }
+    ],
+    "route": "proposed",
+    "reasons": [],
+    "model_snapshot": "typesafe/jev-1.13-20260901",
+    "request_hash": "4a42beaeef0ef5da1ef128530a98e663a3b644d85582f23bd3b94aea4c59edb5",
+    "cited_sections": []
+  },
+  "type_name": "Cloud platform",
+  "options": [
+    {
+      "id": "azure",
+      "name": "Microsoft Azure",
+      "ring": "adopt",
+      "description": "BISTEC primary platform. Default for all enterprise and client-facing projects. Compute preference: Azure Container Apps, then App Service, then AKS only when orchestration complexity is justified."
+    },
+    {
+      "id": "hetzner",
+      "name": "Hetzner Cloud",
+      "ring": "trial",
+      "description": "BISTEC budget platform. For internal tools, dev/staging environments and cost-sensitive workloads. Hetzner Cloud VMs with Docker Compose or k3s."
+    },
+    {
+      "id": "hybrid",
+      "name": "Azure + Hetzner (hybrid)",
+      "ring": "trial",
+      "description": "Production on Azure, non-production on Hetzner to reduce spend."
+    }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "decision_id": "27b51177-a576-4149-8f1c-2518f0466b05",
+      "action": "accept",
+      "option_id": null,
+      "reviewer": "Jane Architect",
+      "reason": null,
+      "at_utc": "2026-09-23T02:27:54.149183Z"
+    },
+    {
+      "id": 2,
+      "decision_id": "27b51177-a576-4149-8f1c-2518f0466b05",
+      "action": "override",
+      "option_id": "hetzner",
+      "reviewer": "Jane Architect",
+      "reason": "The client already runs it",
+      "at_utc": "2026-09-23T02:27:54.152211Z"
+    }
+  ],
+  "status": "accepted_override",
+  "status_label": "Accepted (override)"
+}
