@@ -17,4 +17,4 @@ src-tauri/target
 # App data / tests
 *.sqlite
 test-results
-playwright-report
+playwright-report.claude/worktrees/
