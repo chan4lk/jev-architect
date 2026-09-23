@@ -1,0 +1,113 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 2600 >>
+stream
+BT
+/F1 11 Tf
+15 TL
+72 740 Td
+(Customer Self-Service Portal - Requirements Overview) Tj
+T*
+T*
+(OVERVIEW) Tj
+T*
+(This document captures the requirements for a new customer self-service portal for a) Tj
+T*
+(regional insurer client of BISTEC Global. Policyholders will use the portal to view policy) Tj
+T*
+(documents, file and track claims, and update contact and billing details without calling) Tj
+T*
+(the contact centre.) Tj
+T*
+T*
+(SCOPE AND USERS) Tj
+T*
+(The portal must support approximately 20,000 registered policyholders at launch, with) Tj
+T*
+(headroom for growth as the insurer migrates further policy lines onto the platform. Peak) Tj
+T*
+(concurrent usage is expected around monthly billing cycles and renewal periods, so the) Tj
+T*
+(system should handle bursty traffic without manual intervention.) Tj
+T*
+T*
+(AUTHENTICATION) Tj
+T*
+(Corporate staff and agents will sign in with the insurer's existing Microsoft 365 tenant) Tj
+T*
+(via single sign-on \(SSO\); policyholders will use a separate, portal-specific login. The) Tj
+T*
+(authentication design should reuse BISTEC's default Microsoft identity platform) Tj
+T*
+(integration rather than a bespoke identity provider.) Tj
+T*
+T*
+(BUDGET AND TIMELINE) Tj
+T*
+(The client has stated a tight budget for this engagement and prefers to reuse managed) Tj
+T*
+(cloud services over self-hosted infrastructure wherever the cost difference is) Tj
+T*
+(significant. A first release is targeted within one quarter, covering policy viewing and) Tj
+T*
+(claims status only; billing updates and document uploads can follow in a later phase.) Tj
+T*
+T*
+(TEAM AND DELIVERY) Tj
+T*
+(The insurer's in-house engineering team is a .NET team with several years of experience) Tj
+T*
+(running ASP.NET Core services in Azure, and would maintain the solution after handover.) Tj
+T*
+(BISTEC will pair with the client team during delivery so that ownership can transfer) Tj
+T*
+(smoothly at the end of the engagement.) Tj
+T*
+T*
+(COMPLIANCE) Tj
+T*
+(The portal processes personal and policy data for EU-resident customers, so the solution) Tj
+T*
+(must meet GDPR requirements for data minimisation, consent, and the right to erasure.) Tj
+T*
+(Audit logging of access to policy and claims records is required for the insurer's) Tj
+T*
+(compliance reporting.) Tj
+T*
+T*
+(NON-FUNCTIONAL REQUIREMENTS) Tj
+T*
+(The portal should remain available during the insurer's business hours with no planned) Tj
+T*
+(downtime for routine deployments. Response times for common actions such as viewing a) Tj
+T*
+(policy or checking claim status should stay under two seconds under normal load.) Tj
+T*
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000185 00000 n 
+0000000311 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2963
+%%EOF
