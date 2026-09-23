@@ -190,6 +190,16 @@ jev-architect/
    └─ src/bin/catalog_check.rs   the catalogue-drift checker above (`calibrate` is a companion binary landing alongside it)
 ```
 
+## Releasing
+
+Bump `version` in `src-tauri/tauri.conf.json` and `package.json`, merge to `main`, then push a matching tag:
+
+```bash
+git tag v0.1.0 && git push origin v0.1.0
+```
+
+`.github/workflows/release.yml` builds the macOS (Apple Silicon + Intel `.dmg`/`.app`) and Windows (NSIS `.exe` + `.msi`) installers and publishes a GitHub Release. Builds are unsigned (no Apple notarisation / Authenticode yet).
+
 ## Known limitations
 
 - **No OCR.** A scanned or image-only PDF with no extractable text layer is
