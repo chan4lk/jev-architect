@@ -1,0 +1,84 @@
+name: Release
+
+# Push a tag like v0.1.0 (matching tauri.conf.json "version") to build the
+# macOS (Apple Silicon + Intel) and Windows installers and publish a release.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos-latest
+            target: aarch64-apple-darwin
+            args: --target aarch64-apple-darwin
+          - platform: macos-latest
+            target: x86_64-apple-darwin
+            args: --target x86_64-apple-darwin
+          - platform: windows-latest
+            target: ""
+            args: ""
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri -> target
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build and upload installers
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "BISTEC Architect ${{ github.ref_name }}"
+          releaseBody: |
+            BISTEC Architect desktop app — local MiniCPM builds the brief, Jev (TypeSafe via OpenRouter) makes BISTEC-aligned technology decisions, a named reviewer approves every ADR.
+
+            **Downloads**
+            - macOS Apple Silicon: `*_aarch64.dmg`
+            - macOS Intel: `*_x64.dmg`
+            - Windows: `*_x64-setup.exe` (NSIS) or `*_x64_en-US.msi`
+
+            **Prerequisites:** Ollama with `ollama pull hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M`, and an OpenRouter API key (Settings → OpenRouter API key). See README.
+
+            **Unsigned build:** macOS may say the app "is damaged" or from an unidentified developer — run `xattr -dr com.apple.quarantine "/Applications/BISTEC Architect.app"` or right-click → Open. Windows SmartScreen: More info → Run anyway.
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish the draft release once every platform uploaded
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release edit "${{ github.ref_name }}" --repo "${{ github.repository }}" --draft=false --latest
