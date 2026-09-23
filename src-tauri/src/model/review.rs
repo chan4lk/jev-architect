@@ -75,7 +75,8 @@ fn is_blank(s: &Option<String>) -> bool {
 }
 
 /// The ADR status implied by a decision's review history (spec FR-18).
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum AdrStatus {
   ProposedAi,
   Accepted,

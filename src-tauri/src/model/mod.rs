@@ -3,3 +3,4 @@ pub mod catalog;
 pub mod decision;
 pub mod review;
 pub mod settings;
+pub mod report;
