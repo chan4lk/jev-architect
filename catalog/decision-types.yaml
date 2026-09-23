@@ -253,6 +253,7 @@ types:
     name: IaC (Azure)
     group: iac
     matrix: { requirement: "IaC (Azure)", recommended: "Bicep", alternative: "Terraform", avoid: "ARM templates" }
+    baseline: true   # Architecture Review Checklist: required on every project
     question: "Which infrastructure-as-code tool should provision this project's Azure resources?"
     options:
       - { id: bicep, name: "Bicep", ring: adopt, description: "Azure-native IaC.", aliases: [bicep] }
@@ -263,6 +264,7 @@ types:
     name: IaC (Hetzner)
     group: iac
     matrix: { requirement: "IaC (Hetzner)", recommended: "Terraform", alternative: "Pulumi", avoid: "Manual setup" }
+    baseline: true   # Architecture Review Checklist: required on every project
     question: "Which infrastructure-as-code tool should provision this project's Hetzner resources?"
     options:
       - { id: terraform, name: "Terraform", ring: adopt, description: "Multi-cloud IaC.", aliases: [terraform] }
@@ -272,6 +274,7 @@ types:
   - id: ci-cd
     name: CI/CD
     matrix: { requirement: "CI/CD", recommended: "GitHub Actions", alternative: "Azure DevOps", avoid: "Jenkins" }
+    baseline: true   # Architecture Review Checklist: required on every project
     question: "Which CI/CD platform should build and deploy this project?"
     options:
       - { id: github-actions, name: "GitHub Actions", ring: adopt, description: "BISTEC CI/CD default; GitHub (Bistec org) source control.", aliases: [github actions] }
@@ -290,6 +293,7 @@ types:
   - id: monitoring
     name: Monitoring
     matrix: { requirement: "Monitoring", recommended: "App Insights + Azure Monitor", alternative: "Grafana stack (Hetzner)", avoid: "ELK (unless justified)" }
+    baseline: true   # Architecture Review Checklist: required on every project
     question: "Which monitoring and observability stack should this project use?"
     options:
       - { id: app-insights, name: "App Insights + Azure Monitor", ring: adopt, description: "Application Insights with adaptive sampling, 30-day retention.", aliases: [application insights, app insights, azure monitor] }

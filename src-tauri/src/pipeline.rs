@@ -951,19 +951,25 @@ async fn applicability_stage(run: &Run<'_>, platforms: &PlatformsStage) -> Resul
     let candidates = candidate_types(cat, &outcome, &run.ev.brief);
     let fitted = run.evidence_state()?;
 
+    // Baseline types (IaC, CI/CD, monitoring) are required on every project,
+    // so they are applicable without asking; only the rest go to Jev.
+    let (baseline, asked_types): (Vec<String>, Vec<String>) = candidates
+        .iter()
+        .cloned()
+        .partition(|t| cat.type_by_id(t).is_some_and(|dt| dt.baseline));
     let mut applicable = Vec::new();
     let mut not_applicable = Vec::new();
-    if !candidates.is_empty() {
+    if !asked_types.is_empty() {
         let asked = ask(
             run.d,
             run.id,
             STAGE_APPLICABILITY,
             &run.settings,
             &fitted.state,
-            applicability_questions(cat, &candidates),
+            applicability_questions(cat, &asked_types),
         )
         .await?;
-        for type_id in &candidates {
+        for type_id in &asked_types {
             let p = noul(&asked.answers, &format!("applies__{type_id}"))?;
             if p >= APPLICABILITY_THRESHOLD {
                 applicable.push(type_id.clone());
@@ -975,6 +981,10 @@ async fn applicability_stage(run: &Run<'_>, platforms: &PlatformsStage) -> Resul
             }
         }
     }
+
+    // Keep catalogue order across baseline + asked types.
+    applicable.extend(baseline);
+    applicable.sort_by_key(|t| cat.types.iter().position(|dt| &dt.id == t));
 
     Ok(ApplicabilityStage {
         candidates,

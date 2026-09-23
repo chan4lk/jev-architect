@@ -100,11 +100,11 @@ pub fn applicability_questions(cat: &Catalog, type_ids: &[String]) -> BTreeMap<S
             format!("applies__{type_id}"),
             Question::noul(
                 format!(
-                    "Does the project described in `brief` need a decision about {}? Answer yes only if the brief states or clearly implies a need for {}.",
+                    "Will building the software described in `brief` require choosing {}? Answer yes if the brief states this need, or if software with the described requirements would normally need {}. Answer no if nothing in the brief requires it.",
                     dt.name, gloss
                 ),
-                format!("The brief states or clearly implies a need for {gloss}."),
-                format!("The brief does not state or imply a need for {gloss}."),
+                format!("The brief states a need for {gloss}, or software with the described requirements would normally need it."),
+                format!("Nothing in the brief requires {gloss}."),
             ),
         );
     }

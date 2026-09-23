@@ -308,6 +308,18 @@ async fn run_one_case(catalog: &Arc<Catalog>, case: &GoldenCase, api_key: &str) 
     }
   }
 
+  // Diagnose expectations that never became a decision: judged not
+  // applicable by Jev (with its probability) vs. excluded by the rule layer.
+  let decided: BTreeSet<&str> = decisions.iter().map(|d| d.type_id.as_str()).collect();
+  for t in case.expected.keys().filter(|t| !decided.contains(t.as_str())) {
+    let why = report
+      .as_ref()
+      .and_then(|r| r.not_applicable.iter().find(|n| &n.type_id == t))
+      .map(|n| format!("judged not applicable (p={:.2})", n.probability))
+      .unwrap_or_else(|| "not a candidate (excluded by rules or platform choice)".to_string());
+    eprintln!("calibrate:   {}: expected `{t}` not decided — {why}", case.id);
+  }
+
   Ok(CaseRun {
     id: case.id.clone(),
     stage: row.stage,
@@ -478,8 +490,17 @@ fn render_calibration_report(cases: &[CaseRun], total_cost: f64) -> String {
   out.push_str(&format!("- Total input tokens: {total_input_tokens}\n"));
   out.push_str(&format!("- Expected-stage agreement: {stage_correct}/{stage_total}\n"));
   out.push_str(&format!(
-    "- Expected options never decided (not applicable/skipped): {missing}\n\n"
+    "- Expected options never decided (not applicable/skipped): {missing}\n"
   ));
+  for case in cases {
+    let decided: BTreeSet<&str> = case.decisions.iter().map(|d| d.type_id.as_str()).collect();
+    for (t, opt) in &case.expected {
+      if !decided.contains(t.as_str()) {
+        out.push_str(&format!("  - `{}`: `{t}` (expected `{opt}`)\n", case.id));
+      }
+    }
+  }
+  out.push('\n');
 
   out.push_str(
     "| threshold | min_margin | accuracy | n | precision(Proposed) | n | share needs_architect | n | expected_route agreement | n |\n",

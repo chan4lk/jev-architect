@@ -56,6 +56,10 @@ pub struct DecisionType {
   pub matrix: Option<MatrixRow>,
   pub question: String,
   pub options: Vec<OptionDef>,
+  /// Required on every BISTEC project (skill "Architecture Review Checklist"):
+  /// never pruned by the applicability stage.
+  #[serde(default)]
+  pub baseline: bool,
 }
 
 /// One scoring criterion: a 5-level Jev Score rubric (level 0 = worst, 4 = best).

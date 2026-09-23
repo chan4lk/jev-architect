@@ -309,6 +309,7 @@ mod tests {
             matrix: None,
             question: "Which widget?".to_string(),
             options,
+            baseline: false,
         };
         let cat = Catalog {
             types: vec![dt.clone()],

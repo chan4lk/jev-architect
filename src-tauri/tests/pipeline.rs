@@ -404,6 +404,30 @@ async fn dotnet_backend_never_asks_about_node_rows() {
     }
 }
 
+/// Baseline types (IaC, CI/CD, monitoring — required on every BISTEC project)
+/// are never put to the applicability question and are decided even when Jev
+/// would have said "not applicable" for everything.
+#[tokio::test]
+async fn baseline_types_skip_applicability_and_are_always_decided() {
+    let fake = fake_jev(
+        Script::new()
+            .choice("choice__cloud-platform", "azure")
+            .noul("applies__", 0.05),
+    );
+    let d = mode_a_deps(&fake);
+    let id = ready_session(&d).await;
+    run_decisions(&d, &id, &NoopSink).await.unwrap();
+
+    let applicability = requests_with(&fake, "applies__");
+    let keys: Vec<&String> = applicability.iter().flat_map(|r| r.questions.keys()).collect();
+    for baseline in ["iac-azure", "ci-cd", "monitoring"] {
+        assert!(!keys.iter().any(|k| **k == format!("applies__{baseline}")), "{baseline} was asked");
+        assert_eq!(requests_with(&fake, &format!("choice__{baseline}")).len(), 1, "{baseline} not decided");
+    }
+    // A non-baseline type Jev judged not applicable is still pruned.
+    assert!(requests_with(&fake, "choice__document-db").is_empty());
+}
+
 // ---- precedent (AC-12) ---------------------------------------------------
 
 #[tokio::test]
