@@ -1,0 +1,8 @@
+
+# specclaw: raw timing ledgers. timeline.md (the render) is committed.
+.specclaw/changes/*/timeline.jsonl
+.specclaw/changes/archive/*/timeline.jsonl
+
+# specclaw: bf-* collector handoff files. Regenerated every run.
+.specclaw/analysis/.collect/
+.env*

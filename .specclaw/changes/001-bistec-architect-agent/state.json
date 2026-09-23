@@ -1,0 +1,12 @@
+{
+  "change": "001-bistec-architect-agent",
+  "phase": "tasks",
+  "branch": "",
+  "size": "architectural",
+  "phases": {
+    "proposal": {"status":"approved","at":"2026-09-23T01:08:16Z"},
+    "spec": {"status":"done","at":"2026-09-23T01:15:41Z"},
+    "design": {"status":"done","at":"2026-09-23T01:16:33Z"},
+    "tasks": {"status":"done","at":"2026-09-23T01:17:16Z"}
+  }
+}
