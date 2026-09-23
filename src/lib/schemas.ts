@@ -286,6 +286,15 @@ export const HealthSchema = z.object({
 });
 export type Health = z.infer<typeof HealthSchema>;
 
+/** The Ollama-only half of `Health`: no Jev call, cheap to poll on every Home load. */
+export const LocalModelStatusSchema = z.object({
+  ollama_reachable: z.boolean(),
+  model_present: z.boolean(),
+  model: z.string(),
+  pull_command: z.string(),
+});
+export type LocalModelStatus = z.infer<typeof LocalModelStatusSchema>;
+
 export const ProgressSchema = z.object({
   session_id: z.string(),
   stage: z.string(),

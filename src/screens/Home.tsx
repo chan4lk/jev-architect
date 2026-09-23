@@ -1,8 +1,10 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { TriangleAlertIcon } from "lucide-react";
 import { toast } from "sonner";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -36,10 +38,15 @@ export function Home() {
   const [tab, setTab] = useState<"describe" | "upload">("describe");
   const [text, setText] = useState("");
   const [noticeOpen, setNoticeOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   const pendingActionRef = useRef<(() => void) | null>(null);
 
   const noticeQuery = useQuery({ queryKey: ["data-notice"], queryFn: api.dataNotice });
   const sessionsQuery = useQuery({ queryKey: ["sessions"], queryFn: api.listSessions });
+  // Gates Mode A (Describe) on the local model being reachable and pulled
+  // (spec edge case "Ollama not running / model not pulled"). Mode B
+  // (Upload) never depends on this, so it's never gated by this query.
+  const localModelQuery = useQuery({ queryKey: ["local-model-status"], queryFn: api.localModelStatus });
 
   const ackMutation = useMutation({
     mutationFn: () => api.ackDataNotice(),
@@ -92,8 +99,24 @@ export function Home() {
   }
 
   const trimmedLength = text.trim().length;
-  const canSubmitDescribe = trimmedLength >= MIN_DESCRIBE_LENGTH;
+  const localModelStatus = localModelQuery.data;
+  // Optimistic while the check is still in flight, so the button doesn't
+  // flash disabled on every Home load; once we know it's down, it stays
+  // disabled until "Check again" says otherwise.
+  const localModelUnavailable = !!localModelStatus && (!localModelStatus.ollama_reachable || !localModelStatus.model_present);
+  const canSubmitDescribe = trimmedLength >= MIN_DESCRIBE_LENGTH && !localModelUnavailable;
   const sessions = sessionsQuery.data ?? [];
+
+  async function copyPullCommand() {
+    if (!localModelStatus) return;
+    try {
+      await navigator.clipboard.writeText(localModelStatus.pull_command);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      toast.error("Could not copy to clipboard.");
+    }
+  }
 
   return (
     <div className="mx-auto max-w-4xl space-y-8 p-6">
@@ -112,6 +135,38 @@ export function Home() {
         </TabsList>
 
         <TabsContent value="describe" className="mt-4 space-y-3">
+          {localModelUnavailable && localModelStatus && (
+            <Alert variant="destructive">
+              <TriangleAlertIcon />
+              <AlertTitle>Local model unavailable</AlertTitle>
+              <AlertDescription className="space-y-2">
+                <p>
+                  {!localModelStatus.ollama_reachable
+                    ? "Ollama isn't reachable, so Describe is disabled."
+                    : `The model "${localModelStatus.model}" isn't pulled yet, so Describe is disabled.`}{" "}
+                  Uploading a small document still works — it doesn't need the local model.
+                </p>
+                {!localModelStatus.model_present && (
+                  <div className="flex items-center gap-2">
+                    <code className="flex-1 overflow-x-auto rounded-lg bg-muted px-2.5 py-2 font-mono text-xs">
+                      {localModelStatus.pull_command}
+                    </code>
+                    <Button size="sm" variant="outline" onClick={copyPullCommand}>
+                      {copied ? "Copied" : "Copy"}
+                    </Button>
+                  </div>
+                )}
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => localModelQuery.refetch()}
+                  disabled={localModelQuery.isFetching}
+                >
+                  {localModelQuery.isFetching ? "Checking…" : "Check again"}
+                </Button>
+              </AlertDescription>
+            </Alert>
+          )}
           <Label htmlFor="describe-text">Project description</Label>
           <Textarea
             id="describe-text"
@@ -120,7 +175,7 @@ export function Home() {
             onChange={(event) => setText(event.target.value)}
             placeholder="Describe the project: what it does, who uses it, scale, budget, team skills, compliance needs…"
           />
-          {!canSubmitDescribe && (
+          {trimmedLength < MIN_DESCRIBE_LENGTH && (
             <p className="text-xs text-muted-foreground">
               Add at least {MIN_DESCRIBE_LENGTH} characters ({trimmedLength}/{MIN_DESCRIBE_LENGTH}) so
               there's enough to extract a brief from.

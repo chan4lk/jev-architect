@@ -1,7 +1,7 @@
 {
   "decision": {
-    "id": "27b51177-a576-4149-8f1c-2518f0466b05",
-    "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+    "id": "0ca14950-6054-45fe-b167-ee9ab2fe7618",
+    "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
     "type_id": "cloud-platform",
     "choice": "azure",
     "confidence": 0.8,
@@ -78,21 +78,21 @@
   "reviews": [
     {
       "id": 1,
-      "decision_id": "27b51177-a576-4149-8f1c-2518f0466b05",
+      "decision_id": "0ca14950-6054-45fe-b167-ee9ab2fe7618",
       "action": "accept",
       "option_id": null,
       "reviewer": "Jane Architect",
       "reason": null,
-      "at_utc": "2026-09-23T02:27:54.149183Z"
+      "at_utc": "2026-09-23T04:27:05.767074Z"
     },
     {
       "id": 2,
-      "decision_id": "27b51177-a576-4149-8f1c-2518f0466b05",
+      "decision_id": "0ca14950-6054-45fe-b167-ee9ab2fe7618",
       "action": "override",
       "option_id": "hetzner",
       "reviewer": "Jane Architect",
       "reason": "The client already runs it",
-      "at_utc": "2026-09-23T02:27:54.152211Z"
+      "at_utc": "2026-09-23T04:27:05.770281Z"
     }
   ],
   "status": "accepted_override",

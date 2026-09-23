@@ -274,17 +274,51 @@ pub struct Health {
     pub openrouter_error: Option<String>,
 }
 
+/// The Ollama half of the health check: reachability and model presence,
+/// with no Jev call. Shared by [`health_check`] and [`local_model_status`]
+/// so there is exactly one implementation (spec edge case "Ollama not
+/// running / model not pulled").
+async fn probe_local_model(local: &dyn LocalModel) -> (bool, bool) {
+    match local.model_present().await {
+        Ok(present) => (true, present),
+        Err(LocalModelError::Unreachable(_) | LocalModelError::Timeout) => (false, false),
+        Err(_) => (true, false),
+    }
+}
+
+/// IPC contract `LocalModelStatus`: a lightweight, Jev-free probe the UI can
+/// call on every Home screen load to gate Mode A (Describe) without the cost
+/// of a real Jev call (unlike [`health_check`], which is user-initiated).
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct LocalModelStatus {
+    pub ollama_reachable: bool,
+    pub model_present: bool,
+    pub model: String,
+    pub pull_command: String,
+}
+
+/// Reports whether the local model (Ollama) is reachable and pulled. Never
+/// touches Jev/OpenRouter, so it's safe and cheap to call on every Home
+/// screen load, unlike [`health_check`].
+pub async fn local_model_status(state: &AppState, clients: &dyn ClientFactory) -> CmdResult<LocalModelStatus> {
+    let settings = state.store.get_settings();
+    let local = clients.local(&settings);
+    let (ollama_reachable, model_present) = probe_local_model(local.as_ref()).await;
+    Ok(LocalModelStatus {
+        ollama_reachable,
+        model_present,
+        model: settings.ollama_model.clone(),
+        pull_command: pull_command(&settings.ollama_model),
+    })
+}
+
 /// Reports Ollama reachability, model presence, and whether the OpenRouter
 /// key works (one minimal Noul call). User-initiated and sends no user
 /// content, so it is exempt from the data-notice gate.
 pub async fn health_check(state: &AppState, clients: &dyn ClientFactory) -> CmdResult<Health> {
     let settings = state.store.get_settings();
     let local = clients.local(&settings);
-    let (ollama_reachable, model_present) = match local.model_present().await {
-        Ok(present) => (true, present),
-        Err(LocalModelError::Unreachable(_) | LocalModelError::Timeout) => (false, false),
-        Err(_) => (true, false),
-    };
+    let (ollama_reachable, model_present) = probe_local_model(local.as_ref()).await;
 
     let (openrouter, openrouter_error) = match api_key(state)? {
         None => (OpenRouterStatus::NoKey, None),
@@ -574,6 +608,11 @@ pub mod ipc {
     #[tauri::command]
     pub async fn health_check(state: S<'_>) -> CmdResult<Health> {
         super::health_check(&state, &LiveClients).await
+    }
+
+    #[tauri::command]
+    pub async fn local_model_status(state: S<'_>) -> CmdResult<LocalModelStatus> {
+        super::local_model_status(&state, &LiveClients).await
     }
 
     #[tauri::command]

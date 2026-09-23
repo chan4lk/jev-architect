@@ -13,7 +13,7 @@ use bistec_architect::jev::{
     Answer, DecisionClient, DecisionRequest, DecisionResponse, FakeJev, JevError, Question, Usage,
 };
 use bistec_architect::model::brief::{Budget, BriefItem, Compliance, Scale, Timeline};
-use bistec_architect::model::catalog::Catalog;
+use bistec_architect::model::catalog::{Catalog, Ring};
 use bistec_architect::model::decision::{ReasonCode, Route};
 use bistec_architect::model::review::{NewReview, ReviewAction};
 use bistec_architect::ollama::FakeLocalModel;
@@ -696,4 +696,51 @@ async fn editing_the_brief_after_decisions_clears_them_for_a_fresh_run() {
     let total = types.len();
     types.dedup();
     assert_eq!(types.len(), total, "stale decisions from the first run are not reported");
+}
+
+// ---- edge case: every option of an applicable type is on hold -----------
+
+/// A clone of the bundled catalogue with every option of `type_id` forced to
+/// `Ring::Hold` (spec edge case "every option for a type is on hold").
+fn catalog_with_every_option_on_hold(type_id: &str) -> Catalog {
+    let mut cat = Catalog::bundled().unwrap();
+    let dt = cat.types.iter_mut().find(|t| t.id == type_id).expect("type exists in the bundled catalogue");
+    for opt in dt.options.iter_mut() {
+        opt.ring = Ring::Hold;
+    }
+    cat
+}
+
+#[tokio::test]
+async fn every_option_on_hold_is_skipped_with_no_eligible_options_and_never_asked() {
+    let fake = fake_jev(Script::new());
+    let local = Arc::new(FakeLocalModel::new("m", true, vec![Ok(mode_a_brief_json())]));
+    let jev: Arc<dyn DecisionClient> = fake.clone();
+    let d = Deps {
+        catalog: Arc::new(catalog_with_every_option_on_hold("document-db")),
+        store: Arc::new(Store::open_in_memory().unwrap()),
+        jev,
+        local,
+    };
+    let id = ready_session(&d).await;
+    run_decisions(&d, &id, &NoopSink).await.unwrap();
+
+    // No request was ever sent for the all-hold type (DESCRIPTION never
+    // mentions any of its options, so none becomes eligible).
+    assert!(requests_with(&fake, "choice__document-db").is_empty());
+    assert!(requests_with(&fake, "score__document-db").is_empty());
+
+    let report = build_report(&d, &id).unwrap().unwrap();
+    assert!(!report.decisions.iter().any(|v| v.decision.type_id == "document-db"));
+    // It is applicable (not in `not_applicable`) but skipped for lack of
+    // eligible options, not because it doesn't apply to this project.
+    assert!(!report.not_applicable.iter().any(|na| na.type_id == "document-db"));
+
+    let decisions_stage = d.store.get_stage_result(&id, "decisions").expect("decisions stage result");
+    let skipped = decisions_stage["skipped"].as_array().expect("skipped array");
+    let entry = skipped
+        .iter()
+        .find(|s| s["type_id"] == "document-db")
+        .expect("document-db recorded as skipped");
+    assert_eq!(entry["reason"], "no_eligible_options");
 }

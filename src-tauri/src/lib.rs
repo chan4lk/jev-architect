@@ -51,6 +51,7 @@ pub fn run() {
       ipc::data_notice,
       ipc::ack_data_notice,
       ipc::health_check,
+      ipc::local_model_status,
       ipc::start_describe,
       ipc::start_upload,
       ipc::get_session,

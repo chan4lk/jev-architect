@@ -317,9 +317,11 @@ fn settings_defaults_and_round_trip() {
   let store = Store::open_in_memory().unwrap();
   assert_eq!(store.get_settings(), Settings::default());
 
-  let mut custom = Settings::default();
-  custom.reviewer_name = "Jane Architect".to_string();
-  custom.confidence_threshold = 0.7;
+  let mut custom = Settings {
+    reviewer_name: "Jane Architect".to_string(),
+    confidence_threshold: 0.7,
+    ..Settings::default()
+  };
   custom.weights.insert("nfr_fit".to_string(), 0.3);
   store.save_settings(&custom).unwrap();
 

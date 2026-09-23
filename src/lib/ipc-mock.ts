@@ -5,8 +5,10 @@
  *
  * `mockApi` implements the same surface as the real Tauri-backed implementation
  * in `ipc.ts`. `resetMock()` restores the initial seeded state and is meant to
- * be called from `beforeEach` in tests. `setHealthOverride()` is a test-only
- * hook for forcing `health_check()` results (e.g. simulating a missing model).
+ * be called from `beforeEach` in tests. `setHealthOverride()` and
+ * `setLocalModelStatusOverride()` are test-only hooks for forcing
+ * `health_check()`/`local_model_status()` results (e.g. simulating a missing
+ * model or Ollama being down).
  *
  * T12/T13/T15 reuse this mock, so its seeded data is kept realistic and
  * reasonably complete rather than minimal.
@@ -17,6 +19,7 @@ import {
   type Criterion,
   type DecisionView,
   type Health,
+  type LocalModelStatus,
   type Progress,
   type ReasonCode,
   type Report,
@@ -47,6 +50,7 @@ export interface IpcApi {
   dataNotice(): Promise<{ text: string; acked: boolean }>;
   ackDataNotice(): Promise<void>;
   healthCheck(): Promise<Health>;
+  localModelStatus(): Promise<LocalModelStatus>;
   startDescribe(text: string): Promise<SessionView>;
   startUpload(path: string): Promise<SessionView>;
   getSession(id: string): Promise<SessionView>;
@@ -129,6 +133,7 @@ let apiKeyValue: string | null = null;
 let notice = { text: DATA_NOTICE_TEXT, acked: false };
 let sessions = new Map<string, StoredSession>();
 let healthOverride: Partial<Health> | null = null;
+let localModelStatusOverride: Partial<LocalModelStatus> | null = null;
 let sessionCounter = 0;
 let reviewCounter = 0;
 const progressListeners = new Set<(p: Progress) => void>();
@@ -640,6 +645,7 @@ export function resetMock() {
   notice = { text: DATA_NOTICE_TEXT, acked: false };
   sessions = new Map();
   healthOverride = null;
+  localModelStatusOverride = null;
   sessionCounter = 0;
   reviewCounter = 0;
   progressListeners.clear();
@@ -650,6 +656,14 @@ export function resetMock() {
 /** Test-only hook: force the next health_check() result. Pass null to clear. */
 export function setHealthOverride(overrides: Partial<Health> | null) {
   healthOverride = overrides;
+}
+
+/**
+ * Test-only hook: force the next local_model_status() result (e.g. simulate
+ * Ollama being down or the model not being pulled). Pass null to clear.
+ */
+export function setLocalModelStatusOverride(overrides: Partial<LocalModelStatus> | null) {
+  localModelStatusOverride = overrides;
 }
 
 /**
@@ -722,6 +736,16 @@ export const mockApi: IpcApi = {
       openrouter_error: null,
     };
     return { ...base, ...(healthOverride ?? {}) };
+  },
+
+  async localModelStatus() {
+    const base: LocalModelStatus = {
+      ollama_reachable: true,
+      model_present: true,
+      model: settingsStore.ollama_model,
+      pull_command: `ollama pull ${settingsStore.ollama_model}`,
+    };
+    return { ...base, ...(localModelStatusOverride ?? {}) };
   },
 
   async startDescribe(text: string) {

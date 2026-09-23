@@ -1,14 +1,14 @@
 {
   "session": {
-    "id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
-    "created_at": "2026-09-23T02:27:54.081175Z",
+    "id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
+    "created_at": "2026-09-23T04:27:05.718370Z",
     "title": "We need a customer self-service portal for an insurer, built…",
     "mode": "describe",
     "input_text": "We need a customer self-service portal for an insurer, built by a .NET team on Azure.",
     "doc_name": null,
     "stage": "done",
     "error": null,
-    "brief_confirmed_at": "2026-09-23T02:27:54.082846Z"
+    "brief_confirmed_at": "2026-09-23T04:27:05.730524Z"
   },
   "sections": null,
   "doc_path": null,
@@ -57,8 +57,8 @@
     "decisions": [
       {
         "decision": {
-          "id": "27b51177-a576-4149-8f1c-2518f0466b05",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "0ca14950-6054-45fe-b167-ee9ab2fe7618",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "cloud-platform",
           "choice": "azure",
           "confidence": 0.8,
@@ -138,8 +138,8 @@
       },
       {
         "decision": {
-          "id": "a59deafe-8157-4aca-9c6b-6aa439858af3",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "ee7b7888-761c-4d59-95be-c529411eeb86",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "backend-platform",
           "choice": "dotnet",
           "confidence": 0.8,
@@ -206,8 +206,8 @@
       },
       {
         "decision": {
-          "id": "b9077143-06ff-4b07-be33-7cb29305c667",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "60391a96-82b5-4f6c-acb7-19a1274a6ecc",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "rest-api-dotnet",
           "choice": "aspnet-controllers",
           "confidence": 0.8,
@@ -280,8 +280,8 @@
       },
       {
         "decision": {
-          "id": "6cb0c347-e5ee-42b5-ab46-d54d8bd5ae54",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "39148c5a-7d32-4496-a0aa-8ce67c3f4b33",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "relational-db-enterprise",
           "choice": "postgresql",
           "confidence": 0.8,
@@ -354,8 +354,8 @@
       },
       {
         "decision": {
-          "id": "8527cdb6-22a3-4740-8812-ba6f0ba39040",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "9f0e53e4-382c-4f5b-a1ab-d6e1bc89a987",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "document-db",
           "choice": "cosmos-db",
           "confidence": 0.8,
@@ -422,8 +422,8 @@
       },
       {
         "decision": {
-          "id": "44643d66-73dd-4f2d-bceb-2c6fd20980aa",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "db72927e-61f7-43ae-b2c1-f505546d3425",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "full-text-search",
           "choice": "azure-ai-search",
           "confidence": 0.8,
@@ -490,8 +490,8 @@
       },
       {
         "decision": {
-          "id": "c5822102-5052-4191-b1fe-a6f50318b7d6",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "e944ea33-428f-415c-81d1-0b2ebc78c4f3",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "file-storage",
           "choice": "azure-blob",
           "confidence": 0.8,
@@ -558,8 +558,8 @@
       },
       {
         "decision": {
-          "id": "6cbe80d8-dc51-4940-98e1-3db130b761d4",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "5f1fb957-fe31-4432-8925-e27e7dca6106",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "message-queue-enterprise",
           "choice": "azure-service-bus",
           "confidence": 0.8,
@@ -626,8 +626,8 @@
       },
       {
         "decision": {
-          "id": "c260e7de-36c5-4093-b6b1-8ab068d0d188",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "9369529f-dde9-4410-9d82-5b171c7f2f16",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "message-queue-simple",
           "choice": "azure-queue-storage",
           "confidence": 0.8,
@@ -694,8 +694,8 @@
       },
       {
         "decision": {
-          "id": "e35f75fc-0be3-4e3f-9aa0-15fcbfa547ae",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "3361ec40-5c26-42f7-ac5b-ef48b95882a6",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "real-time",
           "choice": "azure-web-pubsub",
           "confidence": 0.8,
@@ -781,8 +781,8 @@
       },
       {
         "decision": {
-          "id": "704a7884-7619-464b-a804-6d4764bce7fa",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "a1c49a69-8f24-445b-b192-611edd14cede",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "background-jobs",
           "choice": "azure-functions",
           "confidence": 0.8,
@@ -868,8 +868,8 @@
       },
       {
         "decision": {
-          "id": "78368fc1-83f5-4441-8273-02c0e2002f8e",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "9e8b76c0-15de-4815-9d79-983261ed3f2a",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "auth-enterprise",
           "choice": "auth0",
           "confidence": 0.8,
@@ -936,8 +936,8 @@
       },
       {
         "decision": {
-          "id": "52678dbe-7043-4e68-be96-7fbbcd6b66cb",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "d6bf90bb-30fd-4205-a214-7aef5037ef09",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "frontend",
           "choice": "blazor",
           "confidence": 0.8,
@@ -1004,8 +1004,8 @@
       },
       {
         "decision": {
-          "id": "88ee7960-fc3b-4c9e-8e8a-5aedcb9f15ea",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "924c4bf6-61ce-432c-91e4-73f7eebb9727",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "css",
           "choice": "css-modules",
           "confidence": 0.8,
@@ -1072,8 +1072,8 @@
       },
       {
         "decision": {
-          "id": "9bae3364-9668-40c2-84ff-2e5c96d3f9e8",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "b00d3ade-a96f-4f46-95bb-af44d1490cb5",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "state-management",
           "choice": "redux-toolkit",
           "confidence": 0.8,
@@ -1165,8 +1165,8 @@
       },
       {
         "decision": {
-          "id": "a548846f-46fb-407e-8edb-cd9bbd3274b5",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "3e35c58e-2734-42ef-9252-77b5b430dfee",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "testing-dotnet",
           "choice": "mstest",
           "confidence": 0.8,
@@ -1233,8 +1233,8 @@
       },
       {
         "decision": {
-          "id": "490bb48b-0298-4e74-8560-5fb3dde1b907",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "70df291a-02ad-4f96-a17e-6075323200b3",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "e2e-testing",
           "choice": "cypress",
           "confidence": 0.8,
@@ -1301,8 +1301,8 @@
       },
       {
         "decision": {
-          "id": "21b7018c-7cd6-4387-bc96-5da0da75f84c",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "4a016720-ae72-454b-9b23-5ee976665a43",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "performance-testing",
           "choice": "artillery",
           "confidence": 0.8,
@@ -1369,8 +1369,8 @@
       },
       {
         "decision": {
-          "id": "b7625dfd-0cc7-43a2-ae24-1a64a4b3316d",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "401c657e-4136-488a-8d1c-de00d57b11e3",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "iac-azure",
           "choice": "bicep",
           "confidence": 0.8,
@@ -1437,8 +1437,8 @@
       },
       {
         "decision": {
-          "id": "ac1a1544-a3eb-4407-ba55-415315dbca01",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "f8ac1638-a15e-45cd-9989-90b21070b519",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "ci-cd",
           "choice": "azure-devops",
           "confidence": 0.8,
@@ -1505,8 +1505,8 @@
       },
       {
         "decision": {
-          "id": "7048fa18-92c6-4946-a172-5db68844cc54",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "7c2a739c-113c-40f3-ac17-d30d72afe872",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "containers",
           "choice": "aks",
           "confidence": 0.8,
@@ -1573,8 +1573,8 @@
       },
       {
         "decision": {
-          "id": "9f91f67b-bf82-4cc5-b02f-7b682df9c98d",
-          "session_id": "a0a6a8a6-9830-43ea-9903-c7dfe0c2a002",
+          "id": "64bece2d-f96b-42cd-83de-538602f67e39",
+          "session_id": "d41dac9f-0bf9-422f-8d2a-97deeda260e3",
           "type_id": "monitoring",
           "choice": "app-insights",
           "confidence": 0.8,

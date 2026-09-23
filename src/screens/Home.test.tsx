@@ -4,7 +4,7 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { Home } from "./Home";
-import { resetMock } from "@/lib/ipc-mock";
+import { resetMock, setLocalModelStatusOverride } from "@/lib/ipc-mock";
 
 function renderHome() {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
@@ -60,5 +60,46 @@ describe("Home — data notice gate", () => {
 
     expect(await screen.findByText("Data notice")).toBeInTheDocument();
     expect(screen.queryByText("Brief screen")).not.toBeInTheDocument();
+  });
+});
+
+describe("Home — local model gating (edge case: Ollama down / model not pulled)", () => {
+  beforeEach(() => resetMock());
+
+  it("disables Describe and shows the pull command when the model isn't pulled, but Upload stays enabled", async () => {
+    setLocalModelStatusOverride({ ollama_reachable: true, model_present: false });
+    renderHome();
+
+    expect(await screen.findByText("Local model unavailable")).toBeInTheDocument();
+    expect(await screen.findByText("ollama pull hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M")).toBeInTheDocument();
+    expect(screen.getByText(/still works/i)).toBeInTheDocument();
+
+    const textarea = await screen.findByLabelText("Project description");
+    fireEvent.change(textarea, { target: { value: "a".repeat(30) } });
+    expect(screen.getByRole("button", { name: /extract brief/i })).toBeDisabled();
+
+    fireEvent.click(screen.getByRole("tab", { name: "Upload requirements" }));
+    expect(screen.getByRole("button", { name: /choose a document/i })).not.toBeDisabled();
+  });
+
+  it("disables Describe when Ollama itself is unreachable", async () => {
+    setLocalModelStatusOverride({ ollama_reachable: false, model_present: false });
+    renderHome();
+
+    expect(await screen.findByText("Local model unavailable")).toBeInTheDocument();
+    expect(screen.getByText(/isn't reachable/i)).toBeInTheDocument();
+
+    const textarea = await screen.findByLabelText("Project description");
+    fireEvent.change(textarea, { target: { value: "a".repeat(30) } });
+    expect(screen.getByRole("button", { name: /extract brief/i })).toBeDisabled();
+  });
+
+  it("leaves Describe enabled at 20+ characters when the local model is reachable and present", async () => {
+    renderHome();
+    const textarea = await screen.findByLabelText("Project description");
+    expect(screen.queryByText("Local model unavailable")).not.toBeInTheDocument();
+
+    fireEvent.change(textarea, { target: { value: "a".repeat(20) } });
+    expect(await screen.findByRole("button", { name: /extract brief/i })).not.toBeDisabled();
   });
 });

@@ -243,6 +243,14 @@ impl HttpJev {
     async fn try_once(&self, req: &DecisionRequest) -> Result<DecisionResponse, JevError> {
         let url = format!("{}/alpha/decisions", self.base_url);
 
+        // NFR-3: the URL, model and question count are safe to log; the API
+        // key and request body (which carries user content) never are.
+        log::debug!(
+            "Jev request: url={url} model={} questions={}",
+            req.model,
+            req.questions.len()
+        );
+
         let send_result = self
             .client
             .post(&url)

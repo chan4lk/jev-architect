@@ -42,6 +42,8 @@ Report = { gates: Gates, decisions: DecisionView[], not_applicable: NotApplicabl
 
 SessionView = { session: Session, sections: Section[] | null, doc_path: 'small' | 'large' | null, brief: Brief | null, report: Report | null }
 Health = { ollama_reachable: boolean, model_present: boolean, model: string, pull_command: string, openrouter: 'ok' | 'no_key' | 'error', openrouter_error: string | null }
+LocalModelStatus = { ollama_reachable: boolean, model_present: boolean, model: string, pull_command: string }
+// A lightweight, Jev-free probe of just the Ollama half of Health — cheap enough to call on every Home screen load to gate Mode A (edge case "Ollama not running / model not pulled").
 Progress = { session_id: string, stage: string, done: number, total: number, message: string | null }   // event name: "pipeline://progress"
 ```
 
@@ -58,6 +60,7 @@ Progress = { session_id: string, stage: string, done: number, total: number, mes
 | `data_notice` | – | `{ text: string, acked: boolean }` |
 | `ack_data_notice` | – | `null` |
 | `health_check` | – | `Health` |
+| `local_model_status` | – | `LocalModelStatus` (Ollama-only; no Jev call, safe to poll) |
 | `start_describe` | `{ text }` | `SessionView` (stage `review` with brief, or rejects `brief_extraction_failed` / `local_model`) |
 | `start_upload` | `{ path }` | `SessionView` (stage `review`; `doc_path` set) |
 | `get_session` | `{ id }` | `SessionView` |

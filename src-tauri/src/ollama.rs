@@ -202,6 +202,9 @@ impl LocalModel for OllamaModel {
 pub struct FakeLocalModel {
     model: String,
     present: bool,
+    /// When set, `model_present` fails as if the Ollama server couldn't be
+    /// reached at all, instead of reporting `present`.
+    unreachable: bool,
     responses: Mutex<VecDeque<Result<String, LocalModelError>>>,
     calls: Mutex<Vec<(String, String)>>,
 }
@@ -215,7 +218,20 @@ impl FakeLocalModel {
         Self {
             model: model.into(),
             present,
+            unreachable: false,
             responses: Mutex::new(VecDeque::from(responses)),
+            calls: Mutex::new(Vec::new()),
+        }
+    }
+
+    /// A fake whose server is down: `model_present` fails with
+    /// `LocalModelError::Unreachable` (simulates "Ollama not running").
+    pub fn unreachable(model: impl Into<String>) -> Self {
+        Self {
+            model: model.into(),
+            present: false,
+            unreachable: true,
+            responses: Mutex::new(VecDeque::new()),
             calls: Mutex::new(Vec::new()),
         }
     }
@@ -250,6 +266,9 @@ impl LocalModel for FakeLocalModel {
     }
 
     async fn model_present(&self) -> Result<bool, LocalModelError> {
+        if self.unreachable {
+            return Err(LocalModelError::Unreachable("fake: server unreachable".to_string()));
+        }
         Ok(self.present)
     }
 

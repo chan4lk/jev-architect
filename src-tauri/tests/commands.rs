@@ -293,6 +293,54 @@ async fn run_decisions_before_the_notice_is_acked_makes_no_jev_call() {
     assert!(clients.jev.call_count() > 0);
 }
 
+// ---- local_model_status: Ollama-only, no Jev call --------------------------
+
+#[tokio::test]
+async fn local_model_status_reports_ollama_state_and_never_calls_jev() {
+    let state = app_state();
+
+    // Model present.
+    let present = FakeClients {
+        jev: Arc::new(FakeJev::new(Box::new(|req: &DecisionRequest| Ok(answer(req))) as Handler)),
+        local: Arc::new(FakeLocalModel::new("hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M", true, vec![])),
+        keys: Mutex::new(Vec::new()),
+    };
+    let status = cmd::local_model_status(&state, &present).await.unwrap();
+    assert!(status.ollama_reachable);
+    assert!(status.model_present);
+    assert_eq!(status.model, "hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M");
+    assert_eq!(status.pull_command, "ollama pull hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M");
+    assert_eq!(present.jev.call_count(), 0);
+
+    // Model not present (but Ollama reachable).
+    let missing = FakeClients {
+        jev: Arc::new(FakeJev::new(Box::new(|req: &DecisionRequest| Ok(answer(req))) as Handler)),
+        local: Arc::new(FakeLocalModel::new("hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M", false, vec![])),
+        keys: Mutex::new(Vec::new()),
+    };
+    let status = cmd::local_model_status(&state, &missing).await.unwrap();
+    assert!(status.ollama_reachable);
+    assert!(!status.model_present);
+    assert_eq!(missing.jev.call_count(), 0);
+
+    // Ollama itself unreachable.
+    let down = FakeClients {
+        jev: Arc::new(FakeJev::new(Box::new(|req: &DecisionRequest| Ok(answer(req))) as Handler)),
+        local: Arc::new(FakeLocalModel::unreachable("hf.co/openbmb/MiniCPM5-2B-GGUF:Q4_K_M")),
+        keys: Mutex::new(Vec::new()),
+    };
+    let status = cmd::local_model_status(&state, &down).await.unwrap();
+    assert!(!status.ollama_reachable);
+    assert!(!status.model_present);
+    assert_eq!(down.jev.call_count(), 0, "local_model_status never touches Jev");
+
+    // No command result carries the key, and it never made contact with the
+    // (never-invoked) Jev client's key-tracking.
+    assert!(present.keys.lock().unwrap().is_empty());
+    assert!(missing.keys.lock().unwrap().is_empty());
+    assert!(down.keys.lock().unwrap().is_empty());
+}
+
 // ---- AC-13: review validation and append-only history -----------------------
 
 #[tokio::test]
@@ -417,6 +465,10 @@ async fn write_contract_fixtures_from_a_full_mode_a_flow() {
     write_fixture("criteria.json", &cmd::get_criteria(&state).unwrap());
     write_fixture("data_notice.json", &cmd::data_notice(&state).unwrap());
     write_fixture("health.json", &cmd::health_check(&state, &clients).await.unwrap());
+    write_fixture(
+        "local_model_status.json",
+        &cmd::local_model_status(&state, &clients).await.unwrap(),
+    );
     cmd::ack_data_notice(&state).unwrap();
 
     let view = cmd::start_describe(&state, &clients, DESCRIPTION).await.unwrap();
