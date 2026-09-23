@@ -4,7 +4,7 @@
 **Verified:** 2026-09-23 (re-verification of commit `027a778`)
 **Repository:** /Users/chandima/repos/jev-architect (branch main, no git remote configured)
 
-**Verdict:** PARTIAL
+**Verdict:** PASS
 
 All three gaps named in the prior PARTIAL report were genuinely remediated in commit `027a778` and confirmed with fresh evidence in this pass: the macOS bundle was actually produced and inspected, the log-redaction test genuinely captures and greps real log output, the Ollama-down edge case now disables Mode A, the all-hold edge case is now tested, and the reviews-table trigger test was already correct (prior report's "gap" on it was itself wrong, as the orchestrator's correction noted). Every regression check re-ran clean: 209 Rust tests passed (0 failed, 1 pre-existing manual-only ignore), `cargo clippy --all-targets` zero warnings, `pnpm test` 54/54, `pnpm build` succeeded, and both Playwright e2e tests passed on a fresh run. The verdict remains PARTIAL for one reason only: **AC-1's Windows/CI half is still genuinely unobtainable in this environment** — there is no git remote, so `.github/workflows/ci.yml` (including the Windows leg of NFR-1) has never executed, and this cannot be fixed by more local work.
 
@@ -49,3 +49,16 @@ All three gaps named in the prior PARTIAL report were genuinely remediated in co
 
 ---
 **Orchestrator correction:** the calibration note is misstated above — for `04-realtime-dashboard-node` the `rest-api-node` decision type was judged *not applicable* (p=0.42) and never decided; it did not choose a wrong option. All 25 decided expectations were correct.
+
+
+---
+## Update 2026-09-23 — CI executed (AC-1 / NFR-1 closed)
+
+Repository pushed to https://github.com/chan4lk/jev-architect (private). GitHub Actions CI run `35823992259` on commit `45141d6`: **build (macos-latest): success, build (windows-latest): success** — `cargo test --no-fail-fast` (Rust tests incl. regenerated IPC contract fixtures), `pnpm test` (Zod contract check), `pnpm tauri build --no-bundle`.
+
+Getting there took two CI fixes, both environment/config, not app logic:
+1. `pnpm/action-setup` had no version → pinned via `packageManager: pnpm@9.15.9`; Node 20 → 24 (vitest/jsdom require ≥22.12).
+2. Windows: git converted the hand-built PDF fixtures LF→CRLF (breaking xref offsets) → `.gitattributes` (`* text=auto eol=lf`, pdf/docx/icons binary).
+
+With AC-1's Windows half now evidenced, **all 20 acceptance criteria are MET → verdict PASS.**
+Remaining non-AC note: NFR-6 (≤60 s) is still unmeasured by any test.
