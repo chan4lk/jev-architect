@@ -1,0 +1,31 @@
+id: 10-out-of-remit-hr-policy
+description: A request to redesign the employee performance review process, PTO accrual policy, and bonus calculation rules — not a technology decision at all.
+brief:
+  summary: Redesign the company's employee performance review process, PTO accrual policy, and quarterly bonus calculation rules.
+  context:
+    scale: unknown
+    budget: unknown
+    timeline: unknown
+    team_size: unknown
+    compliance: []
+    data_sensitivity: unknown
+  requirements:
+    - text: Define a new performance review cadence (quarterly instead of annual)
+      sources: []
+    - text: Redesign the PTO accrual formula for part-time staff
+      sources: []
+    - text: Set new criteria for quarterly bonus eligibility
+      sources: []
+  nfrs: []
+  constraints: []
+  team_skills: []
+  mentioned_technologies: []
+rationale: >
+  This brief asks only for changes to HR policy and process — a performance
+  review cadence, a PTO accrual formula, bonus eligibility criteria — and
+  states no software, technology, or architecture need whatsoever. The FR-10
+  gate question "Does `brief` ask for a software technology or architecture
+  decision?" should therefore score well below the 0.5 gate threshold, and
+  per FR-10, "If is_technical_request < 0.5, the pass stops with 'Out of
+  remit'," with no applicability or decision calls made at all.
+expected_stage: out_of_remit

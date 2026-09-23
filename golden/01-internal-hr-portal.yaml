@@ -1,0 +1,47 @@
+id: 01-internal-hr-portal
+description: Internal HR self-service portal for an insurer's own staff, on Microsoft 365, built by the insurer's .NET team.
+brief:
+  summary: Internal HR self-service portal for a mid-size insurer's own staff, built by the insurer's existing .NET engineering team.
+  context:
+    scale: small
+    budget: moderate
+    timeline: normal
+    team_size: small
+    compliance: [gdpr]
+    data_sensitivity: confidential
+  requirements:
+    - text: Employees can view and update their own HR records
+      sources: []
+    - text: Managers can approve leave requests for their direct reports
+      sources: []
+  nfrs:
+    - text: Must support single sign-on against the insurer's existing Microsoft 365 tenant
+      sources: []
+  constraints:
+    - text: The existing engineering team works primarily in .NET and C#
+      sources: []
+    - text: Budget is moderate, not tight
+      sources: []
+  team_skills:
+    - text: The team is experienced with .NET, C#, and SQL Server
+      sources: []
+  mentioned_technologies: [Microsoft 365, .NET]
+expected:
+  cloud-platform: azure
+  backend-platform: dotnet
+  auth-enterprise: entra-id
+  relational-db-enterprise: sql-server
+rationale: >
+  This is an internal enterprise app used by the insurer's own staff, which the
+  bistec-architect Auth Decision Tree resolves as "Internal enterprise app used
+  by the client's own staff → Entra ID SSO (mandatory)", so auth-enterprise
+  should pick entra-id. The Cloud Platform table's Primary tier ("Microsoft
+  Azure | Default for all enterprise and client-facing projects") applies since
+  this is an enterprise, client-facing-adjacent project with only a moderate
+  (not tight) budget, so cloud-platform is azure rather than the Hetzner budget
+  tier. The Backend Stack table's Primary row ("primary backend. Enterprise
+  APIs, complex domain logic") plus the team's own stated .NET skill selects
+  backend-platform = dotnet. The Quick Reference matrix row "Relational DB
+  (enterprise) | SQL Server" applies because the budget is moderate (not tight)
+  and the cloud platform is Azure (not Hetzner), so the relational-db rule
+  group selects the enterprise row, whose recommended option is sql-server.

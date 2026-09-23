@@ -1,0 +1,33 @@
+id: 07-enterprise-messaging-ordered-delivery
+description: An enterprise order-processing system needing guaranteed, ordered, transactional message delivery with dead-lettering.
+brief:
+  summary: An enterprise order-processing system that needs guaranteed, ordered delivery of messages between services, with dead-lettering for failed messages.
+  context:
+    scale: medium
+    budget: enterprise
+    timeline: normal
+    team_size: small
+    compliance: []
+    data_sensitivity: internal
+  requirements:
+    - text: Messages between services must be delivered in order
+      sources: []
+    - text: Failed messages must be dead-lettered for investigation
+      sources: []
+    - text: Some operations require transactional message delivery
+      sources: []
+  nfrs: []
+  constraints: []
+  team_skills: []
+  mentioned_technologies: []
+expected:
+  cloud-platform: azure
+  message-queue-enterprise: azure-service-bus
+rationale: >
+  The bundled catalogue's "Message queue (enterprise)" question is worded
+  directly from the Quick Reference matrix row's use case — "enterprise
+  messaging (topics, sessions, dead-lettering, ordered or transactional
+  delivery)" — which matches this brief's stated needs for ordered,
+  transactional delivery and dead-lettering exactly, so the message-queue-
+  enterprise type applies and its recommended (adopt) option, Azure Service
+  Bus, is selected. cloud-platform stays azure as the enterprise default.

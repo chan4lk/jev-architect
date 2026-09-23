@@ -19,6 +19,10 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 name = "catalog-check"
 path = "src/bin/catalog_check.rs"
 
+[[bin]]
+name = "calibrate"
+path = "src/bin/calibrate.rs"
+
 [build-dependencies]
 tauri-build = { version = "2.6.3", features = [] }
 
