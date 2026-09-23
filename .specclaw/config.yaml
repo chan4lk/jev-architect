@@ -59,11 +59,11 @@ context:
 # Build settings
 build:
   test_command: "pnpm test && cargo test --manifest-path src-tauri/Cargo.toml"                 # Fast tier: unit/integration. e.g., "npm test", "pytest"
-  e2e_command: ""                  # Slow tier: browser/e2e. e.g., "npx playwright test"
+  e2e_command: "pnpm e2e"                  # Slow tier: browser/e2e. e.g., "npx playwright test"
                                    # Run separately from test_command, per verify.e2e below.
                                    # Absent or empty → no e2e tier, behaviour unchanged.
-  lint_command: ""                 # e.g., "npm run lint"
-  build_command: ""                # e.g., "npm run build"
+  lint_command: "cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets"                 # e.g., "npm run lint"
+  build_command: "pnpm build"                # e.g., "npm run build"
   parallel_tasks: 3               # Max concurrent agent spawns
   timeout_seconds: 300             # Per-task timeout
 
