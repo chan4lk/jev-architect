@@ -222,6 +222,18 @@ pub fn set_api_key(state: &AppState, key: &str) -> CmdResult<()> {
     if key.is_empty() {
         return Err(AppError::validation("The API key must not be empty"));
     }
+    // A pasted clipboard with other text in it is the common failure; an API
+    // key never contains whitespace, and OpenRouter keys start with `sk-or-`.
+    if key.chars().any(char::is_whitespace) {
+        return Err(AppError::validation(
+            "That doesn't look like an API key: it contains spaces or line breaks",
+        ));
+    }
+    if state.store.get_settings().jev_base_url.contains("openrouter.ai") && !key.starts_with("sk-or-") {
+        return Err(AppError::validation(
+            "That doesn't look like an OpenRouter API key: OpenRouter keys start with \"sk-or-\"",
+        ));
+    }
     Ok(state.secrets.set(key)?)
 }
 

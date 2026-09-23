@@ -168,6 +168,10 @@ async fn api_key_is_stored_but_never_returned_by_any_command() {
 
     assert!(!cmd::has_api_key(&state).unwrap());
     assert_eq!(cmd::set_api_key(&state, "   ").unwrap_err().code, "validation");
+    // Clipboard garbage and non-OpenRouter strings are refused, never stored.
+    assert_eq!(cmd::set_api_key(&state, "kubesec scan \\").unwrap_err().code, "validation");
+    assert_eq!(cmd::set_api_key(&state, "not-an-openrouter-key").unwrap_err().code, "validation");
+    assert!(!cmd::has_api_key(&state).unwrap());
     outputs.push(to_json(&cmd::set_api_key(&state, &format!("  {KEY}\n")).unwrap()));
     assert_eq!(state.secrets.get().unwrap().as_deref(), Some(KEY), "stored trimmed");
     outputs.push(to_json(&cmd::has_api_key(&state).unwrap()));
