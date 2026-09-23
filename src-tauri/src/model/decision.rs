@@ -18,7 +18,7 @@ pub enum Route {
 }
 
 /// Why a decision was routed `NeedsArchitect` (spec FR-14).
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ReasonCode {
   LowConfidence,
