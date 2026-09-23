@@ -19,7 +19,7 @@ overridden, or rejected once an architect reviews it in the app.
 
 - **Rust** stable, ≥1.77 (Tauri 2 requirement; `src-tauri/Cargo.toml` pins
   `rust-version = "1.77.2"`).
-- **Node** ≥20 and **pnpm**.
+- **Node** ≥22.22 (24 LTS recommended — vitest and jsdom require it) and **pnpm** 9 (pinned via `packageManager`).
 - **Ollama** ≥0.5, with the local model pulled:
 
   ```sh
