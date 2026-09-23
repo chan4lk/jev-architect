@@ -40,11 +40,13 @@ jobs:
       - name: Install frontend dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run frontend tests
-        run: pnpm test
-
-      - name: Run Rust tests
+      - name: Run Rust tests (regenerates IPC contract fixtures)
         run: cargo test --manifest-path src-tauri/Cargo.toml
+        env:
+          UPDATE_CONTRACT_FIXTURES: "1"
+
+      - name: Run frontend tests (incl. Zod contract check against fresh fixtures)
+        run: pnpm test
 
       - name: Build Tauri app (no bundle)
         run: pnpm tauri build --no-bundle

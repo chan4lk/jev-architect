@@ -393,7 +393,12 @@ async fn export_writes_adrs_with_numbers_and_reports() {
 
 // ---- contract fixtures -------------------------------------------------------
 
+/// Fixtures are committed; they are regenerated only when
+/// `UPDATE_CONTRACT_FIXTURES=1` (CI sets it, then runs the Zod contract test).
 fn write_fixture<T: Serialize>(name: &str, v: &T) {
+    if std::env::var("UPDATE_CONTRACT_FIXTURES").as_deref() != Ok("1") {
+        return;
+    }
     let dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/contract");
     std::fs::create_dir_all(&dir).unwrap();
     let mut text = serde_json::to_string_pretty(v).unwrap();
