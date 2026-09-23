@@ -1,3 +1,19 @@
+pub mod model;
+
+pub mod brief;
+pub mod catalog;
+pub mod commands;
+pub mod docs;
+pub mod jev;
+pub mod ollama;
+pub mod pipeline;
+pub mod questions;
+pub mod render;
+pub mod rules;
+pub mod scoring;
+pub mod secrets;
+pub mod store;
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
   tauri::Builder::default()

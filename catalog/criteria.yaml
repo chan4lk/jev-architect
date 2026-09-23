@@ -1,0 +1,72 @@
+# Decision criteria. Every criterion is a 5-level Jev Score rubric (level 0 = worst, 4 = best).
+# Weights are UNCALIBRATED DEFAULTS drafted from bistec-architect preferences
+# ("Azure-first", "cost optimization as a first-class concern", "deviations documented").
+# Run `cargo run --bin calibrate` against the golden set before trusting them.
+version: 1
+
+criteria:
+  - id: nfr_fit
+    name: Fit with non-functional requirements
+    weight: 0.25
+    instructions: "How well does `option` meet the project's stated non-functional requirements (scale, performance, availability, compliance, data sensitivity) in `brief`?"
+    levels:
+      - "Fails one or more stated non-functional requirements"
+      - "Meets some stated non-functional requirements with significant gaps"
+      - "Meets most stated non-functional requirements with minor gaps"
+      - "Meets all stated non-functional requirements"
+      - "Meets all stated non-functional requirements with clear headroom"
+
+  - id: team_skill_fit
+    name: Team skill fit
+    weight: 0.15
+    instructions: "How well does `option` match the team skills and team size stated in `brief`?"
+    levels:
+      - "The team has no stated experience with this technology or its ecosystem"
+      - "The team has little stated experience; significant ramp-up needed"
+      - "The team has adjacent experience; moderate ramp-up needed"
+      - "The team has stated experience with this ecosystem"
+      - "The team has stated direct experience with this exact technology"
+
+  - id: cost_fit
+    name: Cost fit
+    weight: 0.20
+    instructions: "How well does the running cost of `option` fit the budget band stated in `brief`?"
+    levels:
+      - "Clearly exceeds the stated budget band"
+      - "Likely to exceed the stated budget band"
+      - "Fits the stated budget band with little margin"
+      - "Fits the stated budget band comfortably"
+      - "Well within the stated budget band, with consumption or scale-to-zero pricing"
+
+  - id: bistec_alignment
+    name: BISTEC alignment
+    weight: 0.20
+    instructions: "How closely does `option` follow the BISTEC standards described in `bistec_standard`?"
+    levels:
+      - "Listed by BISTEC as a technology to avoid"
+      - "Not mentioned by BISTEC standards"
+      - "Listed by BISTEC as an alternative, and the brief gives no reason to deviate"
+      - "Listed by BISTEC as an alternative, and the brief gives a reason to deviate"
+      - "Listed by BISTEC as the recommended default"
+
+  - id: lock_in
+    name: Freedom from lock-in
+    weight: 0.10
+    instructions: "How easy would it be to move this project away from `option` later? A higher level means less lock-in."
+    levels:
+      - "Moving away would require a rewrite"
+      - "Moving away would require major rework"
+      - "Moving away would require moderate rework"
+      - "Moving away would require minor rework"
+      - "Moving away would require only configuration changes"
+
+  - id: security_posture
+    name: Security posture
+    weight: 0.10
+    instructions: "How well does `option` support the security and compliance needs stated in `brief` (authentication, encryption, network isolation, secret management)?"
+    levels:
+      - "Conflicts with a stated security or compliance need"
+      - "Supports stated security needs only with significant custom work"
+      - "Supports stated security needs with moderate configuration"
+      - "Supports stated security needs with standard configuration"
+      - "Supports stated security needs natively, including managed identity and private networking"

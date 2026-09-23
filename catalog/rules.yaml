@@ -1,0 +1,52 @@
+# Variant-row selection (spec FR-9). Rules only SELECT or EXCLUDE catalogue rows;
+# they never pick a technology — that is Jev's job.
+# Evaluated after the platform stage has decided cloud-platform, backend-platform and auth_app_type.
+version: 1
+
+groups:
+  - group: rest-api
+    by: backend-platform
+    select:
+      dotnet: [rest-api-dotnet]
+      node: [rest-api-node]
+      java-python: [rest-api-dotnet, rest-api-node]   # deviation → both rows go to the architect
+
+  - group: testing
+    by: backend-platform
+    select:
+      dotnet: [testing-dotnet]
+      node: [testing-node]
+      java-python: [testing-dotnet, testing-node]
+
+  - group: iac
+    by: cloud-platform
+    select:
+      azure: [iac-azure]
+      hetzner: [iac-hetzner]
+      hybrid: [iac-azure, iac-hetzner]
+
+  - group: relational-db
+    # budget row when budget is tight OR cloud is hetzner; otherwise enterprise
+    by: relational-db-tier
+    select:
+      budget: [relational-db-budget]
+      enterprise: [relational-db-enterprise]
+
+  - group: auth
+    by: auth_app_type
+    select:
+      internal_enterprise: [auth-enterprise]
+      b2b_saas: [auth-enterprise]
+      b2c: [auth-b2c]
+      m2m: [auth-enterprise]
+
+  # message-queue has no rule: applicability (Jev Noul per row) decides whether
+  # the enterprise row, the simple row, or both apply.
+
+# The Auth Decision Tree from bistec-architect, used as Choice criteria for auth_app_type
+# and appended to the auth rows' question context.
+auth_app_types:
+  internal_enterprise: "Internal enterprise app used by the client's own staff → Entra ID SSO (mandatory)."
+  b2b_saas: "B2B SaaS used by staff of other organisations → Entra ID External Identities or Azure AD B2C."
+  b2c: "Consumer app used by members of the public → Azure AD B2C or Auth0 (evaluate cost)."
+  m2m: "Machine-to-machine or service-to-service only, no human sign-in → Managed Identity (Azure) or client credentials flow."

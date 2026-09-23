@@ -58,7 +58,7 @@ context:
 
 # Build settings
 build:
-  test_command: ""                 # Fast tier: unit/integration. e.g., "npm test", "pytest"
+  test_command: "pnpm test && cargo test --manifest-path src-tauri/Cargo.toml"                 # Fast tier: unit/integration. e.g., "npm test", "pytest"
   e2e_command: ""                  # Slow tier: browser/e2e. e.g., "npx playwright test"
                                    # Run separately from test_command, per verify.e2e below.
                                    # Absent or empty → no e2e tier, behaviour unchanged.

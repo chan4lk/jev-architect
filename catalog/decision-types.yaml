@@ -1,0 +1,297 @@
+# BISTEC decision catalogue.
+# Source: bistec-architect SKILL.md — "Quick Reference: Technology Selection Matrix"
+# (25 rows) plus two platform types from the "Cloud Platform" and "Backend Stack" tables.
+#
+# Ring mapping: Recommended → adopt, Alternative → trial, Avoid → hold.
+# `matrix` holds the skill's cells verbatim; `catalog-check` diffs them against SKILL.md.
+# Cells listing several technologies ("A / B", "A, B") become separate options with the same ring.
+# A "—" cell contributes no option.
+version: 1
+
+types:
+  # ── Platform types (decided first; drive variant selection in rules.yaml) ──
+  - id: cloud-platform
+    name: Cloud platform
+    source: "Cloud Platform table"
+    question: "Which cloud platform should host this project?"
+    options:
+      - id: azure
+        name: Microsoft Azure
+        ring: adopt
+        description: "BISTEC primary platform. Default for all enterprise and client-facing projects. Compute preference: Azure Container Apps, then App Service, then AKS only when orchestration complexity is justified."
+        aliases: [azure, microsoft azure]
+      - id: hetzner
+        name: Hetzner Cloud
+        ring: trial
+        description: "BISTEC budget platform. For internal tools, dev/staging environments and cost-sensitive workloads. Hetzner Cloud VMs with Docker Compose or k3s."
+        aliases: [hetzner]
+      - id: hybrid
+        name: Azure + Hetzner (hybrid)
+        ring: trial
+        description: "Production on Azure, non-production on Hetzner to reduce spend."
+        aliases: [hybrid]
+
+  - id: backend-platform
+    name: Backend platform
+    source: "Backend Stack table"
+    question: "Which backend platform should this project's services be built on?"
+    options:
+      - id: dotnet
+        name: .NET 8+ / C#
+        ring: adopt
+        description: "BISTEC primary backend. Enterprise APIs, complex domain logic, high-performance services."
+        aliases: [.net, dotnet, c#, csharp, asp.net]
+      - id: node
+        name: Node.js / TypeScript
+        ring: trial
+        description: "BISTEC secondary backend. Lightweight APIs, BFF layers, real-time services, rapid prototypes."
+        aliases: [node, node.js, nodejs, typescript]
+      - id: java-python
+        name: Java or Python
+        ring: hold
+        description: "Avoid for web APIs unless it is a client requirement or an ML/AI workload."
+        aliases: [java, python, spring, django, fastapi, flask]
+
+  # ── Technology Selection Matrix (25 rows) ──
+  - id: rest-api-dotnet
+    name: REST API (.NET)
+    group: rest-api
+    matrix: { requirement: "REST API (.NET)", recommended: ".NET 8 Minimal API", alternative: "ASP.NET Controllers", avoid: "WCF, .NET Framework" }
+    question: "Which .NET API style should this project's REST API use?"
+    options:
+      - { id: dotnet-minimal-api, name: ".NET 8 Minimal API", ring: adopt, description: "Minimal APIs for simple services; MediatR, FluentValidation, Serilog, Polly per BISTEC .NET defaults.", aliases: [minimal api] }
+      - { id: aspnet-controllers, name: "ASP.NET Controllers", ring: trial, description: "Controllers for complex domains.", aliases: [controllers, mvc] }
+      - { id: wcf, name: "WCF", ring: hold, description: "Legacy SOAP framework; avoid.", aliases: [wcf] }
+      - { id: dotnet-framework, name: ".NET Framework", ring: hold, description: "Legacy Windows-only runtime; avoid.", aliases: [.net framework, net framework] }
+
+  - id: rest-api-node
+    name: REST API (Node)
+    group: rest-api
+    matrix: { requirement: "REST API (Node)", recommended: "Fastify + TypeScript", alternative: "Express + TypeScript", avoid: "Plain JavaScript" }
+    question: "Which Node.js framework should this project's REST API use?"
+    options:
+      - { id: fastify-ts, name: "Fastify + TypeScript", ring: adopt, description: "Preferred for new Node projects; Zod validation, Pino logging, TypeScript strict mode.", aliases: [fastify] }
+      - { id: express-ts, name: "Express + TypeScript", ring: trial, description: "Established Node framework with TypeScript.", aliases: [express] }
+      - { id: plain-js, name: "Plain JavaScript", ring: hold, description: "Untyped JavaScript; avoid.", aliases: [plain javascript, vanilla js] }
+
+  - id: relational-db-enterprise
+    name: Relational DB (enterprise)
+    group: relational-db
+    matrix: { requirement: "Relational DB (enterprise)", recommended: "SQL Server", alternative: "PostgreSQL", avoid: "MySQL, SQLite (prod)" }
+    question: "Which relational database should this enterprise project use?"
+    options:
+      - { id: sql-server, name: "SQL Server", ring: adopt, description: "Primary RDBMS for transactional data, complex queries and reporting; Elastic Pools for many small databases.", aliases: [sql server, mssql, azure sql] }
+      - { id: postgresql, name: "PostgreSQL", ring: trial, description: "Open-source RDBMS.", aliases: [postgres, postgresql] }
+      - { id: mysql, name: "MySQL", ring: hold, description: "Avoid.", aliases: [mysql, mariadb] }
+      - { id: sqlite-prod, name: "SQLite (prod)", ring: hold, description: "Avoid SQLite for production enterprise data.", aliases: [sqlite] }
+
+  - id: relational-db-budget
+    name: Relational DB (budget)
+    group: relational-db
+    matrix: { requirement: "Relational DB (budget)", recommended: "PostgreSQL (Hetzner)", alternative: "SQLite (tiny apps)", avoid: "MySQL" }
+    question: "Which relational database should this budget-constrained project use?"
+    options:
+      - { id: postgresql-hetzner, name: "PostgreSQL (Hetzner)", ring: adopt, description: "Budget RDBMS for cost-sensitive projects with an open-source preference.", aliases: [postgres, postgresql] }
+      - { id: sqlite-tiny, name: "SQLite (tiny apps)", ring: trial, description: "Embedded database for tiny apps only.", aliases: [sqlite] }
+      - { id: mysql, name: "MySQL", ring: hold, description: "Avoid.", aliases: [mysql, mariadb] }
+
+  - id: document-db
+    name: Document DB
+    matrix: { requirement: "Document DB", recommended: "Cosmos DB (SQL API)", alternative: "MongoDB on Hetzner", avoid: "DynamoDB" }
+    question: "Which document database should this project use?"
+    options:
+      - { id: cosmos-db, name: "Cosmos DB (SQL API)", ring: adopt, description: "Primary NoSQL: document storage, global distribution, flexible schema; serverless tier under 10K RU/s.", aliases: [cosmos, cosmos db, cosmosdb] }
+      - { id: mongodb-hetzner, name: "MongoDB on Hetzner", ring: trial, description: "Self-hosted document database on the budget platform.", aliases: [mongo, mongodb] }
+      - { id: dynamodb, name: "DynamoDB", ring: hold, description: "AWS-only; avoid.", aliases: [dynamodb, dynamo] }
+
+  - id: full-text-search
+    name: Full-text search
+    matrix: { requirement: "Full-text search", recommended: "Azure AI Search", alternative: "Elasticsearch (Hetzner)", avoid: "SQL LIKE queries" }
+    question: "Which technology should provide full-text search for this project?"
+    options:
+      - { id: azure-ai-search, name: "Azure AI Search", ring: adopt, description: "Full-text, vector and semantic ranking search.", aliases: [azure ai search, azure cognitive search, azure search] }
+      - { id: elasticsearch-hetzner, name: "Elasticsearch (Hetzner)", ring: trial, description: "Self-hosted search on the budget platform.", aliases: [elasticsearch, elastic, opensearch] }
+      - { id: sql-like, name: "SQL LIKE queries", ring: hold, description: "Pattern matching in SQL; avoid for search.", aliases: [like queries, sql like] }
+
+  - id: file-storage
+    name: File storage
+    matrix: { requirement: "File storage", recommended: "Azure Blob Storage", alternative: "Hetzner Object Storage", avoid: "Local filesystem" }
+    question: "Where should this project store files?"
+    options:
+      - { id: azure-blob, name: "Azure Blob Storage", ring: adopt, description: "Object storage with Hot, Cool and Archive tiering.", aliases: [blob storage, azure blob] }
+      - { id: hetzner-object-storage, name: "Hetzner Object Storage", ring: trial, description: "S3-compatible object storage on the budget platform.", aliases: [hetzner object storage, s3] }
+      - { id: local-filesystem, name: "Local filesystem", ring: hold, description: "Server disk storage; avoid.", aliases: [local filesystem, local disk] }
+
+  - id: message-queue-enterprise
+    name: Message queue (enterprise)
+    group: message-queue
+    matrix: { requirement: "Message queue (enterprise)", recommended: "Azure Service Bus", alternative: "RabbitMQ (Hetzner)", avoid: "Azure Queue (complex)" }
+    question: "Which message broker should this project use for enterprise messaging (topics, sessions, dead-lettering, ordered or transactional delivery)?"
+    options:
+      - { id: azure-service-bus, name: "Azure Service Bus", ring: adopt, description: "Enterprise messaging broker.", aliases: [service bus, azure service bus] }
+      - { id: rabbitmq-hetzner, name: "RabbitMQ (Hetzner)", ring: trial, description: "Self-hosted broker on the budget platform.", aliases: [rabbitmq, rabbit] }
+      - { id: azure-queue-complex, name: "Azure Queue (complex)", ring: hold, description: "Azure Queue Storage used for complex messaging needs; avoid.", aliases: [azure queue] }
+
+  - id: message-queue-simple
+    name: Message queue (simple)
+    group: message-queue
+    matrix: { requirement: "Message queue (simple)", recommended: "Azure Queue Storage", alternative: "Redis Pub/Sub", avoid: "Kafka (unless scale demands)" }
+    question: "Which technology should this project use for simple queueing of background work?"
+    options:
+      - { id: azure-queue-storage, name: "Azure Queue Storage", ring: adopt, description: "Simple queues.", aliases: [azure queue storage, queue storage] }
+      - { id: redis-pubsub, name: "Redis Pub/Sub", ring: trial, description: "Lightweight pub/sub on Redis.", aliases: [redis pub/sub, redis pubsub] }
+      - { id: kafka, name: "Kafka (unless scale demands)", ring: hold, description: "Event streaming platform; avoid unless scale demands it.", aliases: [kafka, event hubs kafka] }
+
+  - id: real-time
+    name: Real-time
+    matrix: { requirement: "Real-time", recommended: "SignalR (.NET) / Socket.IO (Node)", alternative: "Azure Web PubSub", avoid: "Polling" }
+    question: "Which technology should deliver real-time updates in this project?"
+    options:
+      - { id: signalr, name: "SignalR (.NET)", ring: adopt, description: "Real-time for .NET backends.", aliases: [signalr] }
+      - { id: socket-io, name: "Socket.IO (Node)", ring: adopt, description: "Real-time for Node backends.", aliases: [socket.io, socketio] }
+      - { id: azure-web-pubsub, name: "Azure Web PubSub", ring: trial, description: "Managed WebSocket service.", aliases: [web pubsub] }
+      - { id: polling, name: "Polling", ring: hold, description: "Periodic client polling; avoid.", aliases: [polling, long polling] }
+
+  - id: background-jobs
+    name: Background jobs
+    matrix: { requirement: "Background jobs", recommended: "Azure Functions / Hangfire", alternative: "BullMQ (Node)", avoid: "cron + scripts" }
+    question: "Which technology should run this project's background jobs?"
+    options:
+      - { id: azure-functions, name: "Azure Functions", ring: adopt, description: "Isolated Worker on .NET 8+, Durable Functions for orchestration; consumption-based.", aliases: [azure functions, functions, durable functions] }
+      - { id: hangfire, name: "Hangfire", ring: adopt, description: ".NET background job processing in-process.", aliases: [hangfire] }
+      - { id: bullmq, name: "BullMQ (Node)", ring: trial, description: "Redis-backed job queue for Node.", aliases: [bullmq, bull] }
+      - { id: cron-scripts, name: "cron + scripts", ring: hold, description: "Ad-hoc scheduled scripts; avoid.", aliases: [cron] }
+
+  - id: auth-enterprise
+    name: Auth (enterprise)
+    group: auth
+    matrix: { requirement: "Auth (enterprise)", recommended: "Entra ID", alternative: "Auth0", avoid: "Custom JWT auth" }
+    question: "Which identity provider should this enterprise application use for authentication?"
+    options:
+      - { id: entra-id, name: "Entra ID", ring: adopt, description: "Microsoft Entra ID with OpenID Connect / OAuth 2.0; mandatory SSO for internal enterprise apps; Managed Identity for service-to-service.", aliases: [entra, entra id, azure ad, aad] }
+      - { id: auth0, name: "Auth0", ring: trial, description: "Third-party identity platform.", aliases: [auth0] }
+      - { id: custom-jwt, name: "Custom JWT auth", ring: hold, description: "Home-grown token auth; avoid.", aliases: [custom jwt, custom auth] }
+
+  - id: auth-b2c
+    name: Auth (B2C)
+    group: auth
+    matrix: { requirement: "Auth (B2C)", recommended: "Azure AD B2C", alternative: "Auth0", avoid: "Firebase Auth" }
+    question: "Which identity provider should this consumer-facing application use for authentication?"
+    options:
+      - { id: azure-ad-b2c, name: "Azure AD B2C", ring: adopt, description: "Consumer identity on Azure (evaluate cost against Auth0).", aliases: [b2c, azure ad b2c, entra external id] }
+      - { id: auth0, name: "Auth0", ring: trial, description: "Third-party identity platform.", aliases: [auth0] }
+      - { id: firebase-auth, name: "Firebase Auth", ring: hold, description: "Google identity service; avoid.", aliases: [firebase, firebase auth] }
+
+  - id: frontend
+    name: Frontend
+    matrix: { requirement: "Frontend", recommended: "Next.js + React", alternative: "Blazor (.NET teams)", avoid: "Angular (new projects)" }
+    question: "Which frontend framework should this project's web UI use?"
+    options:
+      - { id: nextjs-react, name: "Next.js + React", ring: adopt, description: "React 18+ / Next.js 14+ with Tailwind, shadcn/ui.", aliases: [next.js, nextjs, react] }
+      - { id: blazor, name: "Blazor (.NET teams)", ring: trial, description: "For .NET-heavy teams.", aliases: [blazor] }
+      - { id: angular, name: "Angular (new projects)", ring: hold, description: "Avoid for new projects.", aliases: [angular] }
+
+  - id: css
+    name: CSS
+    matrix: { requirement: "CSS", recommended: "Tailwind CSS", alternative: "CSS Modules", avoid: "Styled-components" }
+    question: "Which styling approach should this project's frontend use?"
+    options:
+      - { id: tailwind, name: "Tailwind CSS", ring: adopt, description: "Utility-first CSS.", aliases: [tailwind] }
+      - { id: css-modules, name: "CSS Modules", ring: trial, description: "Locally scoped CSS files.", aliases: [css modules] }
+      - { id: styled-components, name: "Styled-components", ring: hold, description: "Runtime CSS-in-JS; avoid.", aliases: [styled-components, styled components] }
+
+  - id: state-management
+    name: State management
+    matrix: { requirement: "State mgmt", recommended: "Zustand / TanStack Query", alternative: "Redux Toolkit", avoid: "MobX, Recoil" }
+    question: "Which state management approach should this project's frontend use?"
+    options:
+      - { id: zustand, name: "Zustand", ring: adopt, description: "Lightweight client state.", aliases: [zustand] }
+      - { id: tanstack-query, name: "TanStack Query", ring: adopt, description: "Server-state caching and synchronisation.", aliases: [tanstack query, react query] }
+      - { id: redux-toolkit, name: "Redux Toolkit", ring: trial, description: "Redux with less boilerplate.", aliases: [redux, redux toolkit] }
+      - { id: mobx, name: "MobX", ring: hold, description: "Avoid.", aliases: [mobx] }
+      - { id: recoil, name: "Recoil", ring: hold, description: "Avoid.", aliases: [recoil] }
+
+  - id: testing-dotnet
+    name: Testing (.NET)
+    group: testing
+    matrix: { requirement: "Testing (.NET)", recommended: "xUnit + NSubstitute", alternative: "MSTest", avoid: "NUnit (prefer xUnit)" }
+    question: "Which unit testing stack should this .NET project use?"
+    options:
+      - { id: xunit-nsubstitute, name: "xUnit + NSubstitute", ring: adopt, description: "BISTEC .NET test default.", aliases: [xunit, nsubstitute] }
+      - { id: mstest, name: "MSTest", ring: trial, description: "Microsoft test framework.", aliases: [mstest] }
+      - { id: nunit, name: "NUnit (prefer xUnit)", ring: hold, description: "Avoid; prefer xUnit.", aliases: [nunit] }
+
+  - id: testing-node
+    name: Testing (Node)
+    group: testing
+    matrix: { requirement: "Testing (Node)", recommended: "Vitest / Jest", alternative: "—", avoid: "Mocha (legacy)" }
+    question: "Which unit testing framework should this Node project use?"
+    options:
+      - { id: vitest, name: "Vitest", ring: adopt, description: "Fast Vite-native test runner.", aliases: [vitest] }
+      - { id: jest, name: "Jest", ring: adopt, description: "Established JavaScript test runner.", aliases: [jest] }
+      - { id: mocha, name: "Mocha (legacy)", ring: hold, description: "Legacy; avoid.", aliases: [mocha] }
+
+  - id: e2e-testing
+    name: E2E testing
+    matrix: { requirement: "E2E Testing", recommended: "Playwright", alternative: "Cypress", avoid: "Selenium" }
+    question: "Which end-to-end testing tool should this project use?"
+    options:
+      - { id: playwright, name: "Playwright", ring: adopt, description: "Cross-browser E2E testing.", aliases: [playwright] }
+      - { id: cypress, name: "Cypress", ring: trial, description: "Browser E2E testing.", aliases: [cypress] }
+      - { id: selenium, name: "Selenium", ring: hold, description: "Avoid.", aliases: [selenium, webdriver] }
+
+  - id: performance-testing
+    name: Performance testing
+    matrix: { requirement: "Performance Testing", recommended: "k6", alternative: "Artillery", avoid: "JMeter" }
+    question: "Which load and performance testing tool should this project use?"
+    options:
+      - { id: k6, name: "k6", ring: adopt, description: "Scriptable load testing.", aliases: [k6] }
+      - { id: artillery, name: "Artillery", ring: trial, description: "Node-based load testing.", aliases: [artillery] }
+      - { id: jmeter, name: "JMeter", ring: hold, description: "Avoid.", aliases: [jmeter] }
+
+  - id: iac-azure
+    name: IaC (Azure)
+    group: iac
+    matrix: { requirement: "IaC (Azure)", recommended: "Bicep", alternative: "Terraform", avoid: "ARM templates" }
+    question: "Which infrastructure-as-code tool should provision this project's Azure resources?"
+    options:
+      - { id: bicep, name: "Bicep", ring: adopt, description: "Azure-native IaC.", aliases: [bicep] }
+      - { id: terraform, name: "Terraform", ring: trial, description: "Multi-cloud IaC.", aliases: [terraform] }
+      - { id: arm-templates, name: "ARM templates", ring: hold, description: "Raw ARM JSON; avoid.", aliases: [arm, arm templates] }
+
+  - id: iac-hetzner
+    name: IaC (Hetzner)
+    group: iac
+    matrix: { requirement: "IaC (Hetzner)", recommended: "Terraform", alternative: "Pulumi", avoid: "Manual setup" }
+    question: "Which infrastructure-as-code tool should provision this project's Hetzner resources?"
+    options:
+      - { id: terraform, name: "Terraform", ring: adopt, description: "Multi-cloud IaC.", aliases: [terraform] }
+      - { id: pulumi, name: "Pulumi", ring: trial, description: "IaC in general-purpose languages.", aliases: [pulumi] }
+      - { id: manual-setup, name: "Manual setup", ring: hold, description: "Hand-configured servers; avoid.", aliases: [manual] }
+
+  - id: ci-cd
+    name: CI/CD
+    matrix: { requirement: "CI/CD", recommended: "GitHub Actions", alternative: "Azure DevOps", avoid: "Jenkins" }
+    question: "Which CI/CD platform should build and deploy this project?"
+    options:
+      - { id: github-actions, name: "GitHub Actions", ring: adopt, description: "BISTEC CI/CD default; GitHub (Bistec org) source control.", aliases: [github actions] }
+      - { id: azure-devops, name: "Azure DevOps", ring: trial, description: "Azure Pipelines.", aliases: [azure devops, azure pipelines, ado] }
+      - { id: jenkins, name: "Jenkins", ring: hold, description: "Avoid.", aliases: [jenkins] }
+
+  - id: containers
+    name: Containers
+    matrix: { requirement: "Containers", recommended: "Docker + Container Apps", alternative: "Docker + AKS", avoid: "Docker Swarm" }
+    question: "How should this project's containers be hosted?"
+    options:
+      - { id: container-apps, name: "Docker + Container Apps", ring: adopt, description: "Azure Container Apps; scale to zero.", aliases: [container apps, aca] }
+      - { id: aks, name: "Docker + AKS", ring: trial, description: "Kubernetes; only when orchestration complexity is justified.", aliases: [aks, kubernetes, k8s] }
+      - { id: docker-swarm, name: "Docker Swarm", ring: hold, description: "Avoid.", aliases: [docker swarm, swarm] }
+
+  - id: monitoring
+    name: Monitoring
+    matrix: { requirement: "Monitoring", recommended: "App Insights + Azure Monitor", alternative: "Grafana stack (Hetzner)", avoid: "ELK (unless justified)" }
+    question: "Which monitoring and observability stack should this project use?"
+    options:
+      - { id: app-insights, name: "App Insights + Azure Monitor", ring: adopt, description: "Application Insights with adaptive sampling, 30-day retention.", aliases: [application insights, app insights, azure monitor] }
+      - { id: grafana-stack, name: "Grafana stack (Hetzner)", ring: trial, description: "Grafana + Prometheus + Loki on the budget platform.", aliases: [grafana, prometheus, loki] }
+      - { id: elk, name: "ELK (unless justified)", ring: hold, description: "Elasticsearch/Logstash/Kibana; avoid unless justified.", aliases: [elk, kibana, logstash] }
