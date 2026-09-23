@@ -132,6 +132,8 @@ let healthOverride: Partial<Health> | null = null;
 let sessionCounter = 0;
 let reviewCounter = 0;
 const progressListeners = new Set<(p: Progress) => void>();
+/** Test-only one-shot switch: makes runDecisions fail once it reaches `stage`. */
+let pendingRunFailure: { stage: string; error: AppErrorShape } | null = null;
 
 function clone<T>(value: T): T {
   return JSON.parse(JSON.stringify(value));
@@ -591,6 +593,13 @@ async function runDecisionsInternal(id: string): Promise<SessionView> {
 
   for (const s of stages) {
     stored.session.stage = s.stage;
+    if (pendingRunFailure && pendingRunFailure.stage === s.stage) {
+      const { error: errShape } = pendingRunFailure;
+      pendingRunFailure = null;
+      stored.session.stage = `failed:${s.stage}`;
+      stored.session.error = errShape.message;
+      fail(errShape.code, errShape.message, s.stage);
+    }
     for (let done = 1; done <= s.total; done++) {
       await delay(15);
       emitProgress({ session_id: id, stage: s.stage, done, total: s.total, message: null });
@@ -634,12 +643,22 @@ export function resetMock() {
   sessionCounter = 0;
   reviewCounter = 0;
   progressListeners.clear();
+  pendingRunFailure = null;
   seed();
 }
 
 /** Test-only hook: force the next health_check() result. Pass null to clear. */
 export function setHealthOverride(overrides: Partial<Health> | null) {
   healthOverride = overrides;
+}
+
+/**
+ * Test-only one-shot switch: the next `run_decisions`/`retry` call that reaches
+ * `stage` will fail with `error` instead of completing it, then clear itself.
+ * Used to exercise the Run screen's error + retry path (T12).
+ */
+export function failNextRunDecisions(stage: string, error: AppErrorShape) {
+  pendingRunFailure = { stage, error };
 }
 
 seed();
