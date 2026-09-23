@@ -41,7 +41,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run Rust tests (regenerates IPC contract fixtures)
-        run: cargo test --manifest-path src-tauri/Cargo.toml
+        run: cargo test --no-fail-fast --manifest-path src-tauri/Cargo.toml
         env:
           UPDATE_CONTRACT_FIXTURES: "1"
 

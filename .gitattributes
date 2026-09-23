@@ -1,0 +1,9 @@
+# Byte-exact fixtures (hand-built PDFs with xref offsets, golden ADR/report
+# markdown) must not be rewritten to CRLF on Windows checkouts.
+* text=auto eol=lf
+*.pdf binary
+*.docx binary
+*.png binary
+*.ico binary
+*.icns binary
+*.woff2 binary
