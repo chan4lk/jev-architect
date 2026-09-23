@@ -6,3 +6,15 @@
 # specclaw: bf-* collector handoff files. Regenerated every run.
 .specclaw/analysis/.collect/
 .env*
+
+# Node / frontend
+node_modules
+dist
+
+# Rust / Tauri
+src-tauri/target
+
+# App data / tests
+*.sqlite
+test-results
+playwright-report.claude/worktrees/

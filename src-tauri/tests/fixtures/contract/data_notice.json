@@ -1,0 +1,4 @@
+{
+  "text": "The content of your project brief and any uploaded documents is sent, unredacted, to OpenRouter and TypeSafe to produce Jev's technology decisions. Nothing else leaves this machine: the local model (MiniCPM, via Ollama) runs entirely on this computer.",
+  "acked": false
+}

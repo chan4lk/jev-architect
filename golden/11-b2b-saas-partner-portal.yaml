@@ -1,0 +1,39 @@
+id: 11-b2b-saas-partner-portal
+description: A B2B SaaS partner portal used by staff of partner organisations (not the client's own staff, and not the public) to manage shared accounts.
+brief:
+  summary: A B2B SaaS partner portal used by staff of partner organisations, not the client's own staff and not the public, to manage shared accounts, built by an existing .NET team.
+  context:
+    scale: medium
+    budget: enterprise
+    timeline: normal
+    team_size: small
+    compliance: []
+    data_sensitivity: confidential
+  requirements:
+    - text: Staff of partner organisations log in to manage their own shared accounts
+      sources: []
+    - text: Each partner organisation must only see its own data
+      sources: []
+  nfrs: []
+  constraints: []
+  team_skills:
+    - text: The existing engineering team builds complex domain logic in .NET
+      sources: []
+  mentioned_technologies: [.NET]
+expected:
+  cloud-platform: azure
+  backend-platform: dotnet
+  auth-enterprise: entra-id
+rationale: >
+  This is a B2B SaaS app used by staff of other organisations, which the Auth
+  Decision Tree names as "B2B SaaS used by staff of other organisations →
+  Entra ID External Identities or Azure AD B2C." Per rules.yaml's auth rule
+  group, the decided b2b_saas app type selects the auth-enterprise row as a
+  candidate (not auth-b2c), so the eligible options are limited to
+  entra-id/auth0/custom-jwt; of these, entra-id is both the row's adopt-ring
+  (recommended) default and the closest match to "Entra ID External
+  Identities" named first in the decision tree's own guidance text, which is
+  appended to this row's question context. The Backend Stack table's Primary
+  row ("Enterprise APIs, complex domain logic") plus the team's stated .NET
+  skill selects backend-platform = dotnet, and cloud-platform stays azure as
+  the enterprise default.

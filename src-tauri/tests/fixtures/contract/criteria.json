@@ -1,0 +1,32 @@
+[
+  {
+    "id": "nfr_fit",
+    "name": "Fit with non-functional requirements",
+    "weight": 0.25
+  },
+  {
+    "id": "team_skill_fit",
+    "name": "Team skill fit",
+    "weight": 0.15
+  },
+  {
+    "id": "cost_fit",
+    "name": "Cost fit",
+    "weight": 0.2
+  },
+  {
+    "id": "bistec_alignment",
+    "name": "BISTEC alignment",
+    "weight": 0.2
+  },
+  {
+    "id": "lock_in",
+    "name": "Freedom from lock-in",
+    "weight": 0.1
+  },
+  {
+    "id": "security_posture",
+    "name": "Security posture",
+    "weight": 0.1
+  }
+]

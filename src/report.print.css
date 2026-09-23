@@ -1,0 +1,47 @@
+/**
+ * Print stylesheet for the Report screen (FR-20 "Print / Save as PDF").
+ * Imported only by src/screens/Report.tsx.
+ */
+@media print {
+  /* The primary nav lives in AppShell, outside the Report component tree. */
+  nav[aria-label="Primary"] {
+    display: none !important;
+  }
+
+  /* Filters, the export bar, and per-card review buttons carry Tailwind's
+     `print:hidden` utility; this is a defensive fallback for anything tagged
+     directly with the attribute instead. */
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  /* One decision card per page-break-avoid block. */
+  .report-decision-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Force light colours for print, even when the app is in dark mode. */
+  .dark {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --border: oklch(0.922 0 0);
+    --ring-adopt: oklch(0.62 0.14 149);
+    --ring-adopt-foreground: oklch(0.985 0 0);
+    --ring-trial: oklch(0.75 0.15 80);
+    --ring-trial-foreground: oklch(0.205 0.04 80);
+    --ring-hold: oklch(0.6 0.21 25);
+    --ring-hold-foreground: oklch(0.985 0 0);
+  }
+
+  body {
+    background: var(--background) !important;
+    color: var(--foreground) !important;
+  }
+}

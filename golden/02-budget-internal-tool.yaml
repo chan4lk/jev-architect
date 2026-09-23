@@ -1,0 +1,41 @@
+id: 02-budget-internal-tool
+description: A tight-budget internal inventory tracking tool for the operations team, maintained by a solo developer.
+brief:
+  summary: A small internal inventory tracking tool for the operations team, built and run on a tight budget.
+  context:
+    scale: small
+    budget: tight
+    timeline: urgent
+    team_size: solo_pair
+    compliance: []
+    data_sensitivity: internal
+  requirements:
+    - text: Track stock levels across two warehouses
+      sources: []
+    - text: Simple CRUD screens for staff to update counts
+      sources: []
+  nfrs:
+    - text: Must run reliably with minimal ongoing hosting cost
+      sources: []
+  constraints:
+    - text: Total infrastructure budget is under $500 per month
+      sources: []
+    - text: No client-facing SLA; internal use only
+      sources: []
+  team_skills:
+    - text: One developer maintains the tool part time
+      sources: []
+  mentioned_technologies: []
+expected:
+  cloud-platform: hetzner
+  relational-db-budget: postgresql-hetzner
+  iac-hetzner: terraform
+rationale: >
+  The Cloud Platform table's Budget tier ("Hetzner Cloud | Internal tools,
+  dev/staging environments, cost-sensitive workloads") matches this internal,
+  cost-sensitive tool directly, so cloud-platform is hetzner. Because the
+  brief's budget is tight, the relational-db rule group (budget when budget is
+  tight OR cloud is Hetzner) selects the "Relational DB (budget)" matrix row,
+  whose recommended option is "PostgreSQL (Hetzner)" (postgresql-hetzner). The
+  IaC rule group keys off the decided cloud platform: hetzner selects the "IaC
+  (Hetzner)" row, whose recommended option is Terraform.

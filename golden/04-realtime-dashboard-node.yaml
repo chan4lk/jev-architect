@@ -1,0 +1,36 @@
+id: 04-realtime-dashboard-node
+description: A Node.js real-time operations dashboard for internal staff monitoring live sensor data.
+brief:
+  summary: A real-time operations dashboard for internal staff to monitor live sensor data, built by a Node.js and TypeScript team.
+  context:
+    scale: medium
+    budget: moderate
+    timeline: normal
+    team_size: small
+    compliance: []
+    data_sensitivity: internal
+  requirements:
+    - text: The dashboard must show sensor readings updating live without a manual refresh
+      sources: []
+    - text: Support up to 200 concurrent internal viewers
+      sources: []
+  nfrs:
+    - text: Sub-second update latency from sensor to dashboard
+      sources: []
+  constraints: []
+  team_skills:
+    - text: The team builds services in Node.js and TypeScript
+      sources: []
+  mentioned_technologies: [Node.js, TypeScript]
+expected:
+  backend-platform: node
+  rest-api-node: fastify-ts
+  real-time: socket-io
+rationale: >
+  The team's stated Node.js/TypeScript skill and the project's need for
+  "lightweight APIs... real-time services" (Backend Stack table, Secondary
+  row) select backend-platform = node, and the "REST API (Node) | Fastify +
+  TypeScript" matrix row then selects fastify-ts. The Quick Reference matrix
+  row "Real-time | SignalR (.NET) / Socket.IO (Node)" splits into a .NET
+  option and a Node option with the same (adopt) ring; on a Node backend, the
+  applicable option is Socket.IO (Node), i.e. socket-io.

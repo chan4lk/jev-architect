@@ -1,0 +1,105 @@
+# {{ title }} — Report
+
+**Date:** {{ date }}
+
+## Summary
+
+- Decisions: {{ summary.total }} (Proposed: {{ summary.proposed }}, Needs architect: {{ summary.needs_architect }})
+- Review status: Accepted {{ summary.accepted }}, Accepted (override) {{ summary.overridden }}, Rejected {{ summary.rejected }}, Unreviewed {{ summary.unreviewed }}
+- Total Jev cost: {{ summary.cost }}
+- Input tokens: {{ summary.input_tokens }}
+{%- if summary.low_context %}
+
+> Low context: the brief does not have enough context for confident decisions (has_enough_context < 0.5).
+{%- endif %}
+{%- if summary.truncated %}
+
+> Truncated: some evidence was dropped to fit the token budget.
+{%- endif %}
+{%- if summary.injection_flag %}
+
+> Possible prompt injection detected: every decision was routed to Needs architect.
+{%- endif %}
+
+## Brief
+
+{{ brief.summary }}
+
+| Dimension | Value |
+|---|---|
+| Scale | {{ brief.scale }} |
+| Budget | {{ brief.budget }} |
+| Timeline | {{ brief.timeline }} |
+| Team size | {{ brief.team_size }} |
+| Compliance | {{ brief.compliance }} |
+| Data sensitivity | {{ brief.data_sensitivity }} |
+
+**Requirements:**
+{% for r in brief.requirements -%}
+- {{ r }}
+{% else -%}
+- None stated.
+{% endfor %}
+**Non-functional requirements:**
+{% for n in brief.nfrs -%}
+- {{ n }}
+{% else -%}
+- None stated.
+{% endfor %}
+**Constraints:**
+{% for c in brief.constraints -%}
+- {{ c }}
+{% else -%}
+- None stated.
+{% endfor %}
+**Team skills:**
+{% for s in brief.team_skills -%}
+- {{ s }}
+{% else -%}
+- None stated.
+{% endfor %}
+**Mentioned technologies:** {% if brief.mentioned_technologies %}{{ brief.mentioned_technologies|join(", ") }}{% else %}None{% endif %}
+
+## Decisions
+
+| Type | Choice | Ring | Confidence | Route | Status |
+|---|---|---|---|---|---|
+{% for d in decisions_table -%}
+| {{ d.type_name }} | {{ d.choice_name }} | {{ d.ring_word }} | {{ d.confidence }} | {{ d.route_word }} | {{ d.status_label }} |
+{% endfor %}
+{% for s in decision_sections %}
+### {{ s.type_name }}
+
+- Chosen: **{{ s.choice_name }}** ({{ s.ring_word }})
+- Confidence: {{ s.confidence }}
+- Route: {{ s.route_word }}
+- Reasons: {% if s.reasons %}{{ s.reasons|join(", ") }}{% else %}none{% endif %}
+
+- Model snapshot: {{ s.model_snapshot }}
+- Cited sections: {% if s.cited_sections %}{{ s.cited_sections|join(", ") }}{% else %}none{% endif %}
+
+Probabilities:
+{% for o in s.options -%}
+- {{ o.option_name }} ({{ o.ring_word }}): {{ o.probability }}
+{% endfor %}
+| Option | Ring |{% for c in criteria_names %} {{ c }} |{% endfor %} Composite |
+|---|---|{% for c in criteria_names %}---|{% endfor %}---|
+{% for o in s.options -%}
+| {{ o.option_name }} | {{ o.ring_word }} |{% for sc in o.scores %} {{ sc }} |{% endfor %} {{ o.composite }} |
+{% endfor %}
+{% endfor %}
+## Not Applicable
+
+{%- if not_applicable %}
+
+| Type | Probability |
+|---|---|
+{% for n in not_applicable -%}
+| {{ n.type_name }} | {{ n.probability }} |
+{% endfor -%}
+{% else %}
+None.
+{%- endif %}
+
+---
+{{ uncalibrated_note }}

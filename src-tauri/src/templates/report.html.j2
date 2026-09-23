@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ title }} — Report</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; margin: 2rem; line-height: 1.5; color: #111; background: #fff; }
+  h1, h2, h3 { color: #0b3d91; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: left; vertical-align: top; }
+  .badge { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 0.3rem; color: #fff; font-size: 0.85rem; font-weight: 600; }
+  .badge-adopt { background: #2e7d32; }
+  .badge-trial { background: #f9a825; color: #111; }
+  .badge-hold { background: #c62828; }
+  .prob-row { display: flex; align-items: center; gap: 0.5rem; margin: 0.25rem 0; }
+  .prob-label { min-width: 16rem; }
+  .bar-track { background: #eee; border-radius: 0.2rem; height: 0.9rem; flex: 1; }
+  .bar-fill { background: #0b3d91; height: 100%; border-radius: 0.2rem; }
+  .banner { border-left: 4px solid #f9a825; background: #fff8e1; padding: 0.5rem 1rem; margin: 0.5rem 0; }
+  .note { color: #555; font-size: 0.9rem; }
+  @media print {
+    body { margin: 0.5in; color: #000; background: #fff; }
+    .badge, .bar-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .banner { break-inside: avoid; }
+    h3 { break-before: page; }
+  }
+  @media (prefers-color-scheme: dark) {
+    body { color: #eee; background: #1b1b1b; }
+    h1, h2, h3 { color: #8ab4ff; }
+    th, td { border-color: #444; }
+    .bar-track { background: #333; }
+    .banner { background: #3a3320; color: #eee; }
+    .note { color: #aaa; }
+  }
+</style>
+</head>
+<body>
+<h1>{{ title }} — Report</h1>
+<p><strong>Date:</strong> {{ date }}</p>
+
+<h2>Summary</h2>
+<ul>
+<li>Decisions: {{ summary.total }} (Proposed: {{ summary.proposed }}, Needs architect: {{ summary.needs_architect }})</li>
+<li>Accepted: {{ summary.accepted }}, Accepted (override): {{ summary.overridden }}, Rejected: {{ summary.rejected }}, Unreviewed: {{ summary.unreviewed }}</li>
+<li>Total Jev cost: {{ summary.cost }}</li>
+<li>Input tokens: {{ summary.input_tokens }}</li>
+</ul>
+{% if summary.low_context %}<div class="banner">Low context: has_enough_context is below 0.5.</div>{% endif %}
+{% if summary.truncated %}<div class="banner">Truncated: some evidence was dropped to fit the token budget.</div>{% endif %}
+{% if summary.injection_flag %}<div class="banner">Possible prompt injection detected — every decision was routed to Needs architect.</div>{% endif %}
+
+<h2>Brief</h2>
+<p>{{ brief.summary }}</p>
+<table>
+<tr><th>Dimension</th><th>Value</th></tr>
+<tr><td>Scale</td><td>{{ brief.scale }}</td></tr>
+<tr><td>Budget</td><td>{{ brief.budget }}</td></tr>
+<tr><td>Timeline</td><td>{{ brief.timeline }}</td></tr>
+<tr><td>Team size</td><td>{{ brief.team_size }}</td></tr>
+<tr><td>Compliance</td><td>{{ brief.compliance }}</td></tr>
+<tr><td>Data sensitivity</td><td>{{ brief.data_sensitivity }}</td></tr>
+</table>
+<p><strong>Requirements:</strong></p>
+<ul>
+{% for r in brief.requirements %}<li>{{ r }}</li>{% else %}<li>None stated.</li>{% endfor %}
+</ul>
+<p><strong>Non-functional requirements:</strong></p>
+<ul>
+{% for n in brief.nfrs %}<li>{{ n }}</li>{% else %}<li>None stated.</li>{% endfor %}
+</ul>
+<p><strong>Constraints:</strong></p>
+<ul>
+{% for c in brief.constraints %}<li>{{ c }}</li>{% else %}<li>None stated.</li>{% endfor %}
+</ul>
+<p><strong>Team skills:</strong></p>
+<ul>
+{% for s in brief.team_skills %}<li>{{ s }}</li>{% else %}<li>None stated.</li>{% endfor %}
+</ul>
+<p><strong>Mentioned technologies:</strong> {% if brief.mentioned_technologies %}{{ brief.mentioned_technologies|join(", ") }}{% else %}None{% endif %}</p>
+
+<h2>Decisions</h2>
+<table>
+<tr><th>Type</th><th>Choice</th><th>Ring</th><th>Confidence</th><th>Route</th><th>Status</th></tr>
+{% for d in decisions_table %}
+<tr><td>{{ d.type_name }}</td><td>{{ d.choice_name }}</td><td><span class="badge badge-{{ d.ring_class }}">{{ d.ring_word }}</span></td><td>{{ d.confidence }}</td><td>{{ d.route_word }}</td><td>{{ d.status_label }}</td></tr>
+{% endfor %}
+</table>
+
+{% for s in decision_sections %}
+<h3>{{ s.type_name }}</h3>
+<p>Chosen: <strong>{{ s.choice_name }}</strong> <span class="badge badge-{{ s.ring_class }}">{{ s.ring_word }}</span></p>
+<p>Confidence: {{ s.confidence }} — Route: {{ s.route_word }}</p>
+<p>Reasons: {% if s.reasons %}{{ s.reasons|join(", ") }}{% else %}none{% endif %}</p>
+<p class="note">Model snapshot: {{ s.model_snapshot }}</p>
+<p>Cited sections: {% if s.cited_sections %}{{ s.cited_sections|join(", ") }}{% else %}none{% endif %}</p>
+{% for o in s.options %}
+<div class="prob-row">
+  <span class="prob-label"><span class="badge badge-{{ o.ring_class }}">{{ o.ring_word }}</span> {{ o.option_name }} — {{ o.probability }}</span>
+  <div class="bar-track"><div class="bar-fill" style="width: {{ o.probability_pct }}%;"></div></div>
+</div>
+{% endfor %}
+<table>
+<tr><th>Option</th><th>Ring</th>{% for c in criteria_names %}<th>{{ c }}</th>{% endfor %}<th>Composite</th></tr>
+{% for o in s.options %}
+<tr><td>{{ o.option_name }}</td><td>{{ o.ring_word }}</td>{% for sc in o.scores %}<td>{{ sc }}</td>{% endfor %}<td>{{ o.composite }}</td></tr>
+{% endfor %}
+</table>
+{% endfor %}
+
+<h2>Not Applicable</h2>
+{% if not_applicable %}
+<table>
+<tr><th>Type</th><th>Probability</th></tr>
+{% for n in not_applicable %}
+<tr><td>{{ n.type_name }}</td><td>{{ n.probability }}</td></tr>
+{% endfor %}
+</table>
+{% else %}
+<p>None.</p>
+{% endif %}
+
+<hr>
+<p class="note">{{ uncalibrated_note }}</p>
+</body>
+</html>

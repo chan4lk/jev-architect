@@ -1,0 +1,38 @@
+id: 06-document-search-portal
+description: A document-heavy enterprise knowledge portal for staff to search and retrieve thousands of policy documents with varying schema.
+brief:
+  summary: A document-heavy knowledge portal for enterprise staff to search and retrieve thousands of policy documents, built by an existing .NET team.
+  context:
+    scale: medium
+    budget: enterprise
+    timeline: normal
+    team_size: small
+    compliance: []
+    data_sensitivity: internal
+  requirements:
+    - text: Staff must be able to full-text search across a large corpus of documents
+      sources: []
+    - text: Documents are stored with flexible, varying schema per document type
+      sources: []
+  nfrs:
+    - text: Search results must return in under one second
+      sources: []
+  constraints: []
+  team_skills:
+    - text: The existing engineering team builds in .NET
+      sources: []
+  mentioned_technologies: [.NET]
+expected:
+  cloud-platform: azure
+  backend-platform: dotnet
+  document-db: cosmos-db
+  full-text-search: azure-ai-search
+rationale: >
+  The Quick Reference matrix row "Document DB | Cosmos DB (SQL API)" matches
+  the brief's explicit need for flexible, varying-schema document storage
+  ("Primary NoSQL: document storage, global distribution, flexible schema"),
+  and the row "Full-text search | Azure AI Search" matches the stated
+  full-text search requirement directly. The Backend Stack table's Primary
+  row ("Enterprise APIs, complex domain logic") plus the team's stated .NET
+  skill selects backend-platform = dotnet, and cloud-platform stays azure as
+  the enterprise default.

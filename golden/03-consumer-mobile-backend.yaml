@@ -1,0 +1,40 @@
+id: 03-consumer-mobile-backend
+description: Backend API for a public consumer mobile app used by members of the public to book appointments.
+brief:
+  summary: Backend API for a public-facing consumer mobile app used by members of the public to book appointments, built by a team that prefers TypeScript.
+  context:
+    scale: large
+    budget: moderate
+    timeline: normal
+    team_size: small
+    compliance: [gdpr]
+    data_sensitivity: confidential
+  requirements:
+    - text: Consumers sign up and log in from the mobile app
+      sources: []
+    - text: Consumers browse availability and book appointments
+      sources: []
+  nfrs:
+    - text: Must scale to a large public consumer user base
+      sources: []
+  constraints: []
+  team_skills:
+    - text: The team prefers TypeScript for backend services
+      sources: []
+  mentioned_technologies: [Node.js]
+expected:
+  cloud-platform: azure
+  backend-platform: node
+  auth-b2c: azure-ad-b2c
+  rest-api-node: fastify-ts
+rationale: >
+  This is a consumer app used by members of the public, not the client's own
+  staff, which the Auth Decision Tree resolves as "B2C consumer app → Azure AD
+  B2C or Auth0 (evaluate cost)", and the rules.yaml auth group maps the
+  decided b2c app type to the auth-b2c row, whose adopt-ring (recommended)
+  option is azure-ad-b2c. The Cloud Platform table's Primary tier still
+  applies (Azure is the default for client-facing projects). The Backend
+  Stack table's Secondary row ("Lightweight APIs, BFF layers, real-time
+  services, rapid prototypes") and the team's stated TypeScript preference
+  select backend-platform = node, and the Quick Reference matrix row "REST
+  API (Node) | Fastify + TypeScript" then selects fastify-ts.

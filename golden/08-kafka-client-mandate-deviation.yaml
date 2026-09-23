@@ -1,0 +1,36 @@
+id: 08-kafka-client-mandate-deviation
+description: The client already runs Kafka at scale in production and mandates using it for new background processing, deviating from BISTEC's default.
+brief:
+  summary: The client already runs a large-scale Kafka event streaming platform in production and mandates that new background processing use their existing Kafka cluster.
+  context:
+    scale: large
+    budget: enterprise
+    timeline: normal
+    team_size: large
+    compliance: []
+    data_sensitivity: internal
+  requirements:
+    - text: New background workers must publish and consume from the client's existing Kafka cluster
+      sources: []
+  nfrs: []
+  constraints:
+    - text: The client mandates using their existing Kafka infrastructure rather than adopting a new queue technology
+      sources: []
+  team_skills: []
+  mentioned_technologies: [Kafka]
+rationale: >
+  This is a deliberate client-mandated deviation case, not a case where the
+  skill's own defaults point to Kafka: the Quick Reference matrix row
+  "Message queue (simple) | Avoid | Kafka (unless scale demands)" lists Kafka
+  only as a hold-ring (Avoid) option. Because "Kafka" is explicitly mentioned
+  in the brief, the catalogue's hold-eligibility rule (FR-12 / AC-11) makes
+  kafka an eligible option for message-queue-simple, so Jev's Choice may
+  legitimately select it here given the client's mandate and the large scale
+  stated. Whichever option Jev selects, we do not assert `expected` for this
+  type — instead, scoring.rs's routing rule that a hold-ring choice always
+  adds the `hold_option` reason (spec FR-14) means any choice of kafka is
+  necessarily routed Needs architect regardless of confidence or margin, per
+  the skill's own principle that "every deviation must be documented with
+  rationale in the Architecture Decision Record."
+expected_route:
+  message-queue-simple: needs_architect

@@ -1,0 +1,37 @@
+id: 05-hybrid-prod-nonprod
+description: An enterprise system that must run production on Azure while keeping staging and dev environments cheap on a separate platform.
+brief:
+  summary: An enterprise line-of-business system that must run production on Azure for reliability and support, while keeping staging and development environments cheap.
+  context:
+    scale: medium
+    budget: moderate
+    timeline: normal
+    team_size: small
+    compliance: []
+    data_sensitivity: internal
+  requirements:
+    - text: Production must run on Azure for reliability and vendor support
+      sources: []
+    - text: Staging and development environments should minimize ongoing cost
+      sources: []
+  nfrs: []
+  constraints:
+    - text: Non-production environments should not run on the same Azure billing as production
+      sources: []
+  team_skills: []
+  mentioned_technologies: []
+expected:
+  cloud-platform: hybrid
+  iac-azure: bicep
+  iac-hetzner: terraform
+rationale: >
+  The Cloud Platform table's Hybrid tier ("Azure + Hetzner | Production on
+  Azure, non-production on Hetzner to reduce spend") matches this brief's
+  explicit split between a reliable production environment and a
+  cost-minimized non-production environment, so cloud-platform is hybrid. Per
+  rules.yaml's iac rule group, a hybrid cloud platform selects both IaC rows
+  as candidates ("hybrid: [iac-azure, iac-hetzner]"), whose recommended
+  options are Bicep (Azure-native IaC) and Terraform (Hetzner) respectively.
+expected_route:
+  iac-azure: proposed
+  iac-hetzner: proposed
